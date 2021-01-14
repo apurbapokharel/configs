@@ -5,7 +5,8 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'zxqfl/tabnine-vim'
 Plug 'morhetz/gruvbox'
 Plug 'airblade/vim-gitgutter'
-Plug 'preservim/nerdtree'
+Plug 'preservim/nerdtree'|
+            \ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'zefei/vim-wintabs'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -13,13 +14,43 @@ call plug#end()
 
 colorscheme gruvbox
 
-" Support for mouse and global clipboard
-set mouse=n
-set clipboard+=unnamedplus
-
 " Leader
 noremap <Space> <Nop> 
 let mapleader=" "
+" Support for mouse and global clipboard
+
+set mouse=n
+syntax on
+set relativenumber
+set number
+set lazyredraw                   " less redrawing during macro execution etc
+set autoread
+set path+=**                     " add cwd and 1 level of nesting to path
+set hidden                       " switching from unsaved buffer without '!'
+set ignorecase                   " ignore case in search
+set incsearch                    " incremental search highlighting
+set smartcase                    " case-sensitive only with capital letters
+set noruler                      " do not show ruler
+set list lcs=tab:‣\ ,trail:•     " customize invisibles
+set cursorline                   " highlight cursor line
+set splitbelow                   " split below instead of above
+set splitright                   " split after instead of before
+set nobackup                     " do not keep backups
+set noswapfile                   " no more swapfiles
+set clipboard+=unnamedplus       " copy into osx clipboard by default
+set encoding=utf-8               " utf-8 files
+set expandtab                    " softtabs, always (convert tabs to spaces)
+set tabstop=2                    " tabsize 2 spaces (by default)
+set shiftwidth=0                 " use 'tabstop' value for 'shiftwidth'
+set softtabstop=2                " tabsize 2 spaces (by default)
+set laststatus=2                 " always show statusline
+set backspace=2                  " restore backspace
+set nowrap                       " do not wrap text at `textwidth`
+set belloff=all                  " do not show error bells
+set synmaxcol=1000               " do not highlight long lines
+set timeoutlen=250               " keycode delay
+set wildignore+=.git,.DS_Store,node_modules
+set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 
 vmap <leader>f <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
@@ -52,38 +83,6 @@ nnoremap <leader>5 :b5<CR>
 nnoremap <leader>6 :b6<CR>
 nnoremap <leader>7 :b7<CR>
 nnoremap <leader>8 :b8<CR>
-
-syntax on
-set relativenumber
-set number
-set lazyredraw                   " less redrawing during macro execution etc
-set autoread
-set path+=**                     " add cwd and 1 level of nesting to path
-set hidden                       " switching from unsaved buffer without '!'
-set ignorecase                   " ignore case in search
-set incsearch                    " incremental search highlighting
-set smartcase                    " case-sensitive only with capital letters
-set noruler                      " do not show ruler
-set list lcs=tab:‣\ ,trail:•     " customize invisibles
-set cursorline                   " highlight cursor line
-set splitbelow                   " split below instead of above
-set splitright                   " split after instead of before
-set nobackup                     " do not keep backups
-set noswapfile                   " no more swapfiles
-set clipboard+=unnamedplus       " copy into osx clipboard by default
-set encoding=utf-8               " utf-8 files
-set expandtab                    " softtabs, always (convert tabs to spaces)
-set tabstop=2                    " tabsize 2 spaces (by default)
-set shiftwidth=0                 " use 'tabstop' value for 'shiftwidth'
-set softtabstop=2                " tabsize 2 spaces (by default)
-set laststatus=2                 " always show statusline
-set backspace=2                  " restore backspace
-set nowrap                       " do not wrap text at `textwidth`
-set belloff=all                  " do not show error bells
-set synmaxcol=1000               " do not highlight long lines
-set timeoutlen=250               " keycode delay
-set wildignore+=.git,.DS_Store,node_modules
-set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 
 " Good old CTRL+s for saving
 nnoremap <C-s> :write<Cr>
