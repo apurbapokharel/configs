@@ -24,7 +24,6 @@ syntax on
 set relativenumber
 set number
 set lazyredraw                   " less redrawing during macro execution etc
-set statusline=%!bufnr('%')
 set autoread
 set path+=**                     " add cwd and 1 level of nesting to path
 set hidden                       " switching from unsaved buffer without '!'
@@ -182,3 +181,5 @@ inoremap <C-f> <Esc><Esc>:BLines<CR>
 " Search for word in whole project direcotry
 nnoremap <C-p> :Rg!<Cr>
 
+" vim-wintab
+let g:wintabs_ui_buffer_name_format = ' %n: %t '
