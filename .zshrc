@@ -91,6 +91,19 @@ source $ZSH/oh-my-zsh.sh
 
 bindkey -v
 
+function open_with_fzf() {
+    fd -t f -H -I | fzf -m --preview="xdg-mime query default {}" | xargs -ro -d "\n" xdg-open 2>&-
+}
+function cd_with_fzf() {
+    cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)"
+}
+function pacs() {
+    sudo pacman -Syy $(pacman -Ssq | fzf -m --preview="pacman -Si {}" --preview-window=:hidden --bind=space:toggle-preview)
+}
+
+bindkey -s "^F" 'cd_with_fzf^M'
+
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
