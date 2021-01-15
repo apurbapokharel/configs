@@ -24,6 +24,7 @@ syntax on
 set relativenumber
 set number
 set lazyredraw                   " less redrawing during macro execution etc
+set statusline=%!bufnr('%')
 set autoread
 set path+=**                     " add cwd and 1 level of nesting to path
 set hidden                       " switching from unsaved buffer without '!'
@@ -49,6 +50,8 @@ set nowrap                       " do not wrap text at `textwidth`
 set belloff=all                  " do not show error bells
 set synmaxcol=1000               " do not highlight long lines
 set timeoutlen=250               " keycode delay
+set title                        " Show the filename in the window titlebar
+set showcmd                      " Show the (partial) command as it’s being typed
 set wildignore+=.git,.DS_Store,node_modules
 set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 
@@ -69,6 +72,21 @@ inoremap <C-k> <Up>
 inoremap <C-j> <Down>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
+
+" Easy navigation for in normal mode
+noremap K     {
+noremap J     }
+noremap H     ^
+noremap L     $
+
+" when pairing some braces or quotes, put cursor between them
+inoremap <>   <><Left>
+inoremap ()   ()<Left>
+inoremap {}   {}<Left>
+inoremap []   []<Left>
+inoremap ""   ""<Left>
+inoremap ''   ''<Left>
+inoremap ``   ``<Left>
 
 " Buffers
 set hidden

@@ -14,6 +14,7 @@ SPACESHIP_CHAR_SYMBOL=λ
 SPACESHIP_CHAR_SUFFIX=" "
 SPACESHIP_VENV_GENERIC_NAMES=false
 SPACESHIP_EXEC_TIME_SHOW=false
+SPACESHIP_PROMPT_DEFAULT_PREFIX=""
 
 # Path to your oh-my-zsh installation.
 export ZSH="/home/barunpradhan/.oh-my-zsh"
