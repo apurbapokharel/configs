@@ -1,3 +1,3 @@
 # configs
 
-Don't mine me, just my config files
+Don't mind me, just my config files

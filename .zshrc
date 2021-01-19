@@ -104,7 +104,7 @@ function pacs() {
 
 bindkey -s "^F" 'cd_with_fzf^M'
 bindkey -s "^T" 'toggle-fzf-tab^M'
-
+bindkey -s "^g" 'ghcal -u barunslick^M'
 
 # User configuration
 
