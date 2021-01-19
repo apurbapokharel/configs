@@ -83,14 +83,15 @@ ZSH_THEME="spaceship"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
+export FZF_DEFAULT_COMMAND='rg --files --follow --no-ignore-vcs --hidden -g "!{node_modules/*,.git/*}"'
 plugins=(git
 	zsh-autosuggestions
+  fzf-tab
 )
 
 source $ZSH/oh-my-zsh.sh
 
 bindkey -v
-
 function open_with_fzf() {
     fd -t f -H -I | fzf -m --preview="xdg-mime query default {}" | xargs -ro -d "\n" xdg-open 2>&-
 }
@@ -102,6 +103,7 @@ function pacs() {
 }
 
 bindkey -s "^F" 'cd_with_fzf^M'
+bindkey -s "^T" 'toggle-fzf-tab^M'
 
 
 # User configuration
@@ -129,4 +131,6 @@ bindkey -s "^F" 'cd_with_fzf^M'
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-#
+alias trm=trash-put
+alias trl=trash-list
+alias tre=trash-empty
