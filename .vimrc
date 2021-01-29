@@ -10,6 +10,7 @@ Plug 'preservim/nerdtree'|
 Plug 'zefei/vim-wintabs'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'mhinz/vim-grepper'
 call plug#end()
 
 colorscheme gruvbox
@@ -162,7 +163,6 @@ highlight SignColumn guibg=NONE ctermbg=NONE
 
 " NerdTree
 autocmd VimEnter * NERDTree
-autocmd BufWinEnter * silent NERDTreeMirror
 " Move cursor to file when starting in nerdtree
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * NERDTree | if argc() > 0 || exists("s:std_in") | wincmd p | endif
@@ -180,6 +180,31 @@ map <C-f> <Esc><Esc>:Files!<CR>
 inoremap <C-f> <Esc><Esc>:BLines<CR>
 " Search for word in whole project direcotry
 nnoremap <C-p> :Rg!<Cr>
+" Search in files that are added in git
+noremap <C-G> :GFiles<CR>
 
 " vim-wintab
 let g:wintabs_ui_buffer_name_format = ' %n: %t '
+
+" vim-grepper
+let g:grepper={}
+let g:grepper.tools=["rg"]
+
+xmap gr <plug>(GrepperOperator)
+
+" After searching for text, press this mapping to do a project wide find and
+" replace. It's similar to <leader>r except this one applies to all matches
+" across all files instead of just the current file.
+nnoremap <C-R>
+  \ :let @s='\<'.expand('<cword>').'\>'<CR>
+  \ :Grepper -cword -noprompt<CR>
+  \ :cfdo %s/<C-r>s//g \| update
+  \<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
+
+" The same as above except it works with a visual selection.
+xmap <Leader>R
+    \ "sy
+    \ gvgr
+    \ :cfdo %s/<C-r>s//g \| update
+     \<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
+
