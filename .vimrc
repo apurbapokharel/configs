@@ -1,16 +1,18 @@
 call plug#begin('~/.vim/plugged')
-
+Plug 'tpope/vim-commentary' 
+Plug 'machakann/vim-sandwich'
 Plug 'junegunn/vim-easy-align'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'zxqfl/tabnine-vim'
 Plug 'morhetz/gruvbox'
 Plug 'airblade/vim-gitgutter'
 Plug 'preservim/nerdtree'|
-            \ Plug 'Xuyuanp/nerdtree-git-plugin'
+          \ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'zefei/vim-wintabs'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'mhinz/vim-grepper'
+Plug 'junegunn/goyo.vim'
+Plug 'justinmk/vim-sneak'
 call plug#end()
 
 colorscheme gruvbox
@@ -18,7 +20,6 @@ colorscheme gruvbox
 " Leader
 noremap <Space> <Nop> 
 let mapleader=" "
-" Support for mouse and global clipboard
 
 set mouse=n
 syntax on
@@ -132,26 +133,35 @@ highlight EndOfBuffer guibg=NONE ctermbg=NONE guifg=Black ctermfg=0
 " Persistent undo
 " guard for distributions lacking the persistent_undo feature.
 if has('persistent_undo')
-    " define a path to store persistent_undo files.
-    let target_path = expand('~/.config/vim-persisted-undo/')
+  " define a path to store persistent_undo files.
+  let target_path = expand('~/.config/vim-persisted-undo/')
 
-    " create the directory and any parent directories
-    " if the location does not exist.
-    if !isdirectory(target_path)
-        call system('mkdir -p ' . target_path)
-    endif
+  " create the directory and any parent directories
+  " if the location does not exist.
+  if !isdirectory(target_path)
+      call system('mkdir -p ' . target_path)
+  endif
 
-    " point Vim to the defined undo directory.
-    let &undodir = target_path
+  " point Vim to the defined undo directory.
+  let &undodir = target_path
 
-    " finally, enable undo persistence.
-    set undofile
+  " finally, enable undo persistence.
+  set undofile
 endif
 
+function! s:set_transparent_bg()
+hi Normal guibg=NONE ctermbg=NONE " transparent bg
+endfunction
+
 " Make vim transparent backgroud, similar to terminal
-autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE " transparent bg
+autocmd vimenter * call <SID>set_transparent_bg()
+
 
 " Plugins setting and keybindings
+" Goyo
+let g:goyo_width=120
+nnoremap <leader>g :Goyo<CR>
+autocmd! User GoyoLeave nested call <SID>set_transparent_bg()
 
 " Git GitGutter
 set updatetime=100
@@ -171,7 +181,7 @@ nnoremap <C-b> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
 " Close NerdTre automatically when you close vim
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
-    \ quit | endif
+  \ quit | endif
 
 " Fzf 
 " Search for file names
@@ -192,6 +202,11 @@ let g:grepper.tools=["rg"]
 
 xmap gr <plug>(GrepperOperator)
 
+" vim-sneak
+let g:sneak#label = 1
+map f <Plug>Sneak_s
+map F <Plug>Sneak_S
+
 " After searching for text, press this mapping to do a project wide find and
 " replace. It's similar to <leader>r except this one applies to all matches
 " across all files instead of just the current file.
@@ -208,3 +223,11 @@ xmap <Leader>R
     \ :cfdo %s/<C-r>s//g \| update
      \<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
 
+" For sql files
+let g:omni_sql_no_default_maps = 1
+
+" Open file in line where you left off
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g'\"" | endif
+endif

@@ -8,7 +8,7 @@ SPACESHIP_PYENV_SHOW=false
 SPACESHIP_RUBY_SHOW=false
 SPACESHIP_PACKAGE_SHOW=false
 SPACESHIP_NODE_SHOW=false
-SPACESHIP_GIT_SYMBOL=
+# SPACESHIP_GIT_SYMBOL=
 SPACESHIP_GIT_PREFIX=
 SPACESHIP_CHAR_SYMBOL=λ
 SPACESHIP_CHAR_SUFFIX=" "
@@ -81,7 +81,6 @@ ZSH_THEME="spaceship"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-export FZF_DEFAULT_COMMAND='rg --files --follow --no-ignore-vcs --hidden -g "!{node_modules/*,.git/*}"'
 
 plugins=(git
   forgit
@@ -101,7 +100,7 @@ function cd_with_fzf() {
 }
 
 function pacs() {
-    doas pacman -Syy $(pacman -Ssq | fzf -m --preview="pacman -Si {}" --preview-window=:hidden --bind=space:toggle-preview)
+    sudo pacman -Syy $(pacman -Ssq | fzf -m --preview="pacman -Si {}" --preview-window=:hidden --bind=space:toggle-preview)
 }
 
 function open_vim_after_fzf() {
@@ -110,10 +109,6 @@ function open_vim_after_fzf() {
 
 function open_code_after_fzf() {
     cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)" && code
-}
-
-function fzf_search_history() {
-    history | fzf
 }
 
 # find-in-file(s)
@@ -132,32 +127,67 @@ function vf() {
 	fi
 
 }
+function fzf-git-branch() {
+    git rev-parse HEAD > /dev/null 2>&1 || return
 
-# Add doas to current line if not empty else to previous command
-doas-command-line() {
+    git branch --color=always --all --sort=-committerdate |
+        grep -v HEAD |
+        fzf --height 50% --ansi --no-multi --preview-window right:65% \
+            --preview 'git log -n 50 --color=always --date=short --pretty="format:%C(auto)%cd %h%d %s" $(sed "s/.* //" <<< {})' |
+        sed "s/.* //"
+}
+
+function fzf-git-checkout() {
+    git rev-parse HEAD > /dev/null 2>&1 || return
+
+    local branch
+
+    branch=$(fzf-git-branch)
+    if [[ "$branch" = "" ]]; then
+        echo "No branch selected."
+        return
+    fi
+
+    # If branch name starts with 'remotes/' then it is a remote branch. By
+    # using --track and a remote branch name, it is the same as:
+    # git checkout -b branchName --track origin/branchName
+    if [[ "$branch" = 'remotes/'* ]]; then
+        git checkout --track $branch
+    else
+        git checkout $branch;
+    fi
+}
+
+alias gb='fzf-git-branch'
+alias gco='fzf-git-checkout'
+
+# Add sudo to current line if not empty else to previous command
+sudo-command-line() {
     [[ -z $BUFFER ]] && zle up-history
-    [[ $BUFFER != doas\ * ]] && {
+    [[ $BUFFER != sudo\ * ]] && {
       typeset -a bufs
       bufs=(${(z)BUFFER})
       if (( $+aliases[$bufs[1]] )); then
         bufs[1]=$aliases[$bufs[1]]
       fi
-      bufs=(doas $bufs)
+      bufs=(sudo $bufs)
       BUFFER=$bufs
     }
     zle end-of-line
 }
-zle -N doas-command-line
-bindkey "^s" doas-command-line
+zle -N sudo-command-line
+bindkey "^s" sudo-command-line
 
 bindkey -s "^F" 'cd_with_fzf^M'
 bindkey -s "^T" 'toggle-fzf-tab^M'
 bindkey -s "^g" 'ghcal -u barunslick^M'
 bindkey -s "^v" 'open_vim_after_fzf^M'
 bindkey -s "^e" 'open_code_after_fzf^M'
-bindkey -s "^h" 'fzf_search_history^M'
+
 # User configuration
 
+# Add new before each promt
+precmd() $funcstack[1]() echo
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -188,3 +218,11 @@ alias cm=command
 alias ls='exa -l --git'
 . /home/barunpradhan/.oh-my-zsh/plugins/z/z.sh
 . /home/barunpradhan/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_COMMAND='rg --files --follow --no-ignore-vcs --hidden -g "!{node_modules/*,.git/*}"'
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+ --color=fg:#d0d0d0,hl:#5f87af
+ --color=fg+:#d0d0d0,hl+:#5fd7ff
+ --color=info:#afaf87,prompt:#d7005f,pointer:#af5fff
+ --color=marker:#87ff00,spinner:#af5fff,header:#87afaf'

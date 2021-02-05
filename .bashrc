@@ -149,3 +149,5 @@ ex ()
   fi
 }
 export PATH="$PATH:/home/barunpradhan/scripts"
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
