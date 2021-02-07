@@ -1,3 +1,4 @@
+if [ "$TMUX" = "" ]; then tmux; fi
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 SPACESHIP_VI_MODE_SHOW=false
@@ -15,6 +16,9 @@ SPACESHIP_CHAR_SUFFIX=" "
 SPACESHIP_VENV_GENERIC_NAMES=false
 SPACESHIP_EXEC_TIME_SHOW=false
 SPACESHIP_PROMPT_DEFAULT_PREFIX=""
+SPACESHIP_CHAR_COLOR_SUCCESS=#f6830f
+SPACESHIP_DIR_COLOR=blue
+SPACESHIP_VENV_COLOR=green
 
 export ZSH="/home/barunpradhan/.oh-my-zsh"
 ZSH_THEME="spaceship"

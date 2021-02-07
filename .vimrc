@@ -4,7 +4,7 @@ Plug 'machakann/vim-sandwich'
 Plug 'junegunn/vim-easy-align'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'zxqfl/tabnine-vim'
-Plug 'morhetz/gruvbox'
+Plug 'arcticicestudio/nord-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'preservim/nerdtree'|
           \ Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -15,7 +15,7 @@ Plug 'junegunn/goyo.vim'
 Plug 'justinmk/vim-sneak'
 call plug#end()
 
-colorscheme gruvbox
+colorscheme nord
 
 " Leader
 noremap <Space> <Nop> 
@@ -39,7 +39,7 @@ set splitbelow                   " split below instead of above
 set splitright                   " split after instead of before
 set nobackup                     " do not keep backups
 set noswapfile                   " no more swapfiles
-set clipboard+=unnamedplus       " copy into osx clipboard by default
+set clipboard=unnamedplus       " copy into osx clipboard by default
 set encoding=utf-8               " utf-8 files
 set expandtab                    " softtabs, always (convert tabs to spaces)
 set tabstop=2                    " tabsize 2 spaces (by default)
