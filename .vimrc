@@ -172,10 +172,9 @@ highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 highlight SignColumn guibg=NONE ctermbg=NONE
 
 " NerdTree
-autocmd VimEnter * NERDTree
 " Move cursor to file when starting in nerdtree
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * NERDTree | if argc() > 0 || exists("s:std_in") | wincmd p | endif
+autocmd vimenter * if !argc() | NERDTree | endif
 nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-b> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
