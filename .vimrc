@@ -14,6 +14,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'mhinz/vim-grepper'
 Plug 'junegunn/goyo.vim'
 Plug 'justinmk/vim-sneak'
+Plug 'nelstrom/vim-visual-star-search'
 call plug#end()
 
 colorscheme nord
@@ -125,6 +126,22 @@ vnoremap Q :normal @q
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
+" Press * to search for the term under the cursor or a visual selection and
+" then press a key below to replace all instances of it in the current file.
+nnoremap <Leader>r :%s///g<Left><Left>
+nnoremap <Leader>rc :%s///gc<Left><Left><Left>
+
+" The same as above but instead of acting on the whole file it will be
+" restricted to the previously visually selected range. You can do that by
+" pressing *, visually selecting the range you want it to apply to and then
+" press a key below to replace all instances of it in the current selection.
+xnoremap <Leader>r :s///g<Left><Left>
+xnoremap <Leader>rc :s///gc<Left><Left><Left>
+
+" Type a replacement term and press . to repeat the replacement again. Useful
+" for replacing a few instances of the term (comparable to multiple cursors).
+nnoremap <silent> a* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
+xnoremap <silent> a* "sy:let @/=@s<CR>cgn
 " Syncup nerd tree with the current open file
 let g:nerdtree_sync_cursorline = 1
 
@@ -194,7 +211,7 @@ inoremap <C-f> <Esc><Esc>:BLines<CR>
 " Search for word in whole project direcotry
 nnoremap <C-p> :Rg!<Cr>
 " Search in files that are added in git
-noremap <C-G> :GFiles<CR>
+noremap <C-G> :GFiles!<CR>
 
 " vim-wintab
 let g:wintabs_ui_buffer_name_format = ' %n: %t '
