@@ -1,3 +1,11 @@
+" ######  
+" #     # 
+" #     # 
+" ######  
+" #     # 
+" #     # Barun Pradhan
+" ######  https://github.com/barunslick
+
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-commentary' 
 Plug 'machakann/vim-sandwich'
@@ -17,14 +25,15 @@ Plug 'justinmk/vim-sneak'
 Plug 'nelstrom/vim-visual-star-search'
 call plug#end()
 
+set background=dark
 colorscheme nord
 
 " Leader
 noremap <Space> <Nop> 
 let mapleader=" "
 
-set mouse=n
 syntax on
+set mouse=n
 set relativenumber
 set number
 set lazyredraw                   " less redrawing during macro execution etc
@@ -151,6 +160,8 @@ highlight TrailingWhitespace ctermfg=0 guifg=Black ctermbg=8 guibg=#41535B
 " hide ghost tilde characters after end of file
 highlight EndOfBuffer guibg=NONE ctermbg=NONE guifg=Black ctermfg=0
 
+" More clear vim selection method
+hi Visual term=reverse cterm=reverse guibg=Grey
 " Persistent undo
 " guard for distributions lacking the persistent_undo feature.
 if has('persistent_undo')
@@ -170,19 +181,19 @@ if has('persistent_undo')
   set undofile
 endif
 
-function! s:set_transparent_bg()
-hi Normal guibg=NONE ctermbg=NONE " transparent bg
-endfunction
+"function! s:set_transparent_bg()
+"  hi Normal guibg=NONE ctermbg=NONE " transparent bg
+"endfunction
 
 " Make vim transparent backgroud, similar to terminal
-autocmd vimenter * call <SID>set_transparent_bg()
+" autocmd vimenter * call <SID>set_transparent_bg()
 
 
 " Plugins setting and keybindings
 " Goyo
 let g:goyo_width=120
 nnoremap <leader>g :Goyo<CR>
-autocmd! User GoyoLeave nested call <SID>set_transparent_bg()
+" autocmd! User GoyoLeave nested call <SID>set_transparent_bg()
 
 " Git GitGutter
 set updatetime=100
