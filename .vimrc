@@ -16,6 +16,7 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'preservim/nerdtree'|
           \ Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
 Plug 'unkiwii/vim-nerdtree-sync'
 Plug 'zefei/vim-wintabs'
 Plug 'junegunn/fzf.vim'
@@ -237,6 +238,11 @@ xmap gr <plug>(GrepperOperator)
 let g:sneak#label = 1
 map f <Plug>Sneak_s
 map F <Plug>Sneak_S
+
+" For vim-doge 
+let g:doge_doc_standard_python = 'numpy'
+
+
 
 " After searching for text, press this mapping to do a project wide find and
 " replace. It's similar to <leader>r except this one applies to all matches
