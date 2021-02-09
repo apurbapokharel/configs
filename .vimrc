@@ -8,6 +8,7 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'preservim/nerdtree'|
           \ Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'unkiwii/vim-nerdtree-sync'
 Plug 'zefei/vim-wintabs'
 Plug 'junegunn/fzf.vim'
 Plug 'mhinz/vim-grepper'
@@ -123,6 +124,9 @@ vnoremap Q :normal @q
 " Moving lines up and down like with alt in vscode
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
+
+" Syncup nerd tree with the current open file
+let g:nerdtree_sync_cursorline = 1
 
 " highlight trailing whitespace
 highlight TrailingWhitespace ctermfg=0 guifg=Black ctermbg=8 guibg=#41535B
