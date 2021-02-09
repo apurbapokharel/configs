@@ -44,6 +44,10 @@ function pacs() {
     sudo pacman -Syy $(pacman -Ssq | fzf -m --preview="pacman -Si {}" --preview-window=:hidden --bind=space:toggle-preview)
 }
 
+function fzy() {
+    sudo yay -Syy $(yay -Ssq | fzf -m --preview="yay -Si {}" --preview-window=:hidden --bind=space:toggle-preview)
+}
+
 function open_vim_after_fzf() {
     cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)" && vim
 }
@@ -125,7 +129,7 @@ bindkey -s "^T" 'toggle-fzf-tab^M'
 bindkey -s "^g" 'ghcal -u barunslick^M'
 bindkey -s "^v" 'open_vim_after_fzf^M'
 bindkey -s "^e" 'open_code_after_fzf^M'
-
+bindkey -e
 # User configuration
 
 # Add new before each promt
