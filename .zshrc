@@ -138,7 +138,7 @@ bindkey -s "^T" 'toggle-fzf-tab^M'
 bindkey -s "^g" 'ghcal -u barunslick^M'
 bindkey -s "^v" 'open_vim_after_fzf^M'
 bindkey -s "^e" 'open_code_after_fzf^M'
-bindkey -e
+bindkey -s "^k" 'cd ..^M'
 # User configuration
 
 # Add new before each promt
