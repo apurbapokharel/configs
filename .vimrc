@@ -45,12 +45,10 @@ set path+=**                     " add cwd and 1 level of nesting to path
 set hidden                       " switching from unsaved buffer without '!'
 set ignorecase                   " ignore case in search
 set incsearch                    " incremental search highlighting
+set cursorline
 set smartcase                    " case-sensitive only with capital letters
 set noruler                      " do not show ruler
 set list lcs=tab:‣\ ,trail:•     " customize invisibles
-set cursorline
-hi clear CursorLine
-hi CursorLine gui=underline cterm=underline
 set splitbelow                   " split below instead of above
 set splitright                   " split after instead of before
 set nobackup                     " do not keep backups
@@ -79,6 +77,12 @@ inoremap jj <ESC>
 
 map <C-z> :u<CR>
 inoremap <C-z> <Esc><Esc> :u<BAR>:startinsert <CR>
+
+" Toggle underline when in insert mode
+autocmd BufLeave * setlocal nocursorline
+autocmd BufEnter * setlocal cursorline
+autocmd InsertEnter,InsertLeave * set cul!
+map <leader>c :set cul!<CR>
 
 " Movement between splits
 nnoremap <C-h> :wincmd h<CR>
@@ -146,7 +150,6 @@ vnoremap K :m '<-2<CR>gv=gv
 " then press a key below to replace all instances of it in the current file.
 nnoremap <Leader>r :%s///g<Left><Left>
 nnoremap <Leader>rc :%s///gc<Left><Left><Left>
-
 " The same as above but instead of acting on the whole file it will be
 " restricted to the previously visually selected range. You can do that by
 " pressing *, visually selecting the range you want it to apply to and then
@@ -158,8 +161,6 @@ xnoremap <Leader>rc :s///gc<Left><Left><Left>
 " for replacing a few instances of the term (comparable to multiple cursors).
 nnoremap <silent> a* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
 xnoremap <silent> a* "sy:let @/=@s<CR>cgn
-" Syncup nerd tree with the current open file
-let g:nerdtree_sync_cursorline = 1
 
 " highlight trailing whitespace
 highlight TrailingWhitespace ctermfg=0 guifg=Black ctermbg=8 guibg=#41535B
@@ -222,6 +223,9 @@ nnoremap <C-f> :NERDTreeFind<CR>
 " Close NerdTre automatically when you close vim
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
   \ quit | endif
+hi NERDTreeFile guifg=#04a03d guibg=#041404 gui=NONE
+" Syncup nerd tree with the current open file
+let g:nerdtree_sync_cursorline = 1
 
 " Fzf 
 " Search for file names
