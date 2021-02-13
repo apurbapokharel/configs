@@ -101,7 +101,8 @@ noremap K     {
 noremap J     }
 noremap H     ^
 noremap L     $
-
+nmap ] <Plug>(GitGutterNextHunk)
+nmap [ <Plug>(GitGutterPrevHunk)
 " when pairing some braces or quotes, put cursor between them
 inoremap <>   <><Left>
 inoremap ()   ()<Left>
