@@ -19,11 +19,13 @@ Plug 'preservim/nerdtree'|
 Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
 Plug 'unkiwii/vim-nerdtree-sync'
 Plug 'zefei/vim-wintabs'
-Plug 'junegunn/fzf.vim'
 Plug 'mhinz/vim-grepper'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'justinmk/vim-sneak'
 Plug 'nelstrom/vim-visual-star-search'
+Plug 'preservim/tagbar'
 call plug#end()
 
 set background=dark
@@ -46,7 +48,9 @@ set incsearch                    " incremental search highlighting
 set smartcase                    " case-sensitive only with capital letters
 set noruler                      " do not show ruler
 set list lcs=tab:‣\ ,trail:•     " customize invisibles
-set cursorline                   " highlight cursor line
+set cursorline
+hi clear CursorLine
+hi CursorLine gui=underline cterm=underline
 set splitbelow                   " split below instead of above
 set splitright                   " split after instead of before
 set nobackup                     " do not keep backups
@@ -70,6 +74,8 @@ set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 
 vmap <leader>f <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
+
+inoremap jj <ESC>
 
 map <C-z> :u<CR>
 inoremap <C-z> <Esc><Esc> :u<BAR>:startinsert <CR>
@@ -195,6 +201,8 @@ endif
 let g:goyo_width=120
 nnoremap <leader>g :Goyo<CR>
 " autocmd! User GoyoLeave nested call <SID>set_transparent_bg()
+"Tagbar
+nmap <leader>b :TagbarToggle<CR>
 
 " Git GitGutter
 set updatetime=100
@@ -242,7 +250,9 @@ map F <Plug>Sneak_S
 " For vim-doge 
 let g:doge_doc_standard_python = 'numpy'
 
-
+"Remove deafult python PEP* styling
+let g:python_recommended_style = 0
+filetype plugin indent on
 
 " After searching for text, press this mapping to do a project wide find and
 " replace. It's similar to <leader>r except this one applies to all matches
@@ -268,3 +278,4 @@ if has("autocmd")
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal! g'\"" | endif
 endif
+
