@@ -6,7 +6,7 @@
 #     # Barun Pradhan
 ######  https://github.com/barunslick
 
-
+export EDITOR=nvim
 if [ "$TMUX" = "" ]; then tmux; fi
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -144,6 +144,8 @@ bindkey -s "^k" 'cd ..^M'
 # Add new before each promt
 precmd() $funcstack[1]() echo
 
+alias vim="nvim"
+alias vi="nvim"
 alias trm=trash-put
 alias trl=trash-list
 alias tre=trash-empty
@@ -152,10 +154,10 @@ alias ls='exa -l --git'
 . /home/barunpradhan/.oh-my-zsh/plugins/z/z.sh
 . /home/barunpradhan/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND='rg --files --follow --no-ignore-vcs --hidden -g "!{node_modules/*,.git/*}"'
-export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
- --color=fg:#d0d0d0,hl:#5f87af
- --color=fg+:#d0d0d0,hl+:#5fd7ff
- --color=info:#afaf87,prompt:#d7005f,pointer:#af5fff
- --color=marker:#87ff00,spinner:#af5fff,header:#87afaf'
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --ansi
+ --color fg:#d0d0d0,hl:#5f87af
+ --color fg+:#d0d0d0,hl+:#5fd7ff
+ --color info:#afaf87,prompt:#d7005f,pointer:#af5fff
+ --color marker:#87ff00,spinner:#af5fff,header:#87afaf'
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
