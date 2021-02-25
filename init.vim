@@ -25,6 +25,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'justinmk/vim-sneak'
 Plug 'nelstrom/vim-visual-star-search'
+Plug 'lilydjwg/colorizer'
 Plug 'preservim/tagbar'
 call plug#end()
 
@@ -114,17 +115,18 @@ inoremap ``   ``<Left>
 
 " Buffers
 set hidden
-nnoremap  <Esc>l :bp<CR>
-nnoremap  <Esc>h :bn<CR> 
-nnoremap 	<ESC>c :bp <BAR> bd #<CR>
-nnoremap <leader>1 :b1<CR>
-nnoremap <leader>2 :b2<CR>
-nnoremap <leader>3 :b3<CR>
-nnoremap <leader>4 :b4<CR>
-nnoremap <leader>5 :b5<CR>
-nnoremap <leader>6 :b6<CR>
-nnoremap <leader>7 :b7<CR>
-nnoremap <leader>8 :b8<CR>
+nnoremap <A-h> :bp<CR>
+nnoremap <A-l> :bn<CR> 
+nnoremap <A-c> :bp <BAR> bd #<CR>
+nnoremap <A-1> :b1<CR>
+nnoremap <A-2> :b2<CR>
+nnoremap <A-3> :b3<CR>
+nnoremap <A-4> :b4<CR>
+nnoremap <A-5> :b5<CR>
+nnoremap <A-6> :b6<CR>
+nnoremap <A-7> :b7<CR>
+nnoremap <A-8> :b8<CR>
+nnoremap <A-9> :b9<CR>
 
 " Good old CTRL+s for saving
 nnoremap <C-s> :write<Cr>
@@ -199,6 +201,10 @@ endif
 
 
 " Plugins setting and keybindings
+
+"Colorizer
+let g:colorizer_maxlines = 1000
+
 " Goyo
 let g:goyo_width=120
 nnoremap <leader>g :Goyo<CR>
@@ -280,10 +286,6 @@ map F <Plug>Sneak_S
 " For vim-doge 
 let g:doge_doc_standard_python = 'numpy'
 
-"Remove deafult python PEP* styling
-let g:python_recommended_style = 0
-filetype plugin indent on
-
 " After searching for text, press this mapping to do a project wide find and
 " replace. It's similar to <leader>r except this one applies to all matches
 " across all files instead of just the current file.
@@ -309,3 +311,6 @@ if has("autocmd")
     \| exe "normal! g'\"" | endif
 endif
 
+" Highlight column when line exceeds 81 length
+highlight ColorColumn ctermbg=magenta
+call matchadd('ColorColumn', '\%81v', 100)
