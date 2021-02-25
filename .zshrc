@@ -11,23 +11,39 @@ if [ "$TMUX" = "" ]; then tmux; fi
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 SPACESHIP_VI_MODE_SHOW=false
-SPACESHIP_PROMPT_ADD_NEWLINE=false
 SPACESHIP_DIR_TRUNC=2
 SPACESHIP_PROMPT_SEPARATE_LINE=false
-SPACESHIP_PYENV_SHOW=false
-SPACESHIP_RUBY_SHOW=false
-SPACESHIP_PACKAGE_SHOW=false
-SPACESHIP_NODE_SHOW=false
 # SPACESHIP_GIT_SYMBOL=
 SPACESHIP_GIT_PREFIX=
 SPACESHIP_CHAR_SYMBOL=λ
 SPACESHIP_CHAR_SUFFIX=" "
 SPACESHIP_VENV_GENERIC_NAMES=false
-SPACESHIP_EXEC_TIME_SHOW=false
+SPACESHIP_EXEC_TIME_SHOW=true
 SPACESHIP_PROMPT_DEFAULT_PREFIX=""
 SPACESHIP_CHAR_COLOR_SUCCESS=#f6830f
 SPACESHIP_DIR_COLOR=blue
 SPACESHIP_VENV_COLOR=green
+
+SPACESHIP_PROMPT_ADD_NEWLINE=true
+
+SPACESHIP_PROMPT_ORDER=(
+  time          # Time stamps section
+  user          # Username section
+  dir           # Current directory section
+  host          # Hostname section
+  git           # Git section (git_branch + git_status)
+  docker        # Docker section
+  aws           # Amazon Web Services section
+  venv          # virtualenv section
+  battery       # Battery level and status
+  jobs          # Background jobs indicator
+  char          # Prompt character
+)
+
+
+SPACESHIP_RPROMPT_ORDER=(
+ exec_time
+)
 
 export ZSH="/home/barunpradhan/.oh-my-zsh"
 ZSH_THEME="spaceship"
@@ -141,11 +157,9 @@ bindkey -s "^e" 'open_code_after_fzf^M'
 bindkey -s "^k" 'cd ..^M'
 # User configuration
 
-# Add new before each promt
-precmd() $funcstack[1]() echo
-
 alias vim="nvim"
 alias vi="nvim"
+alias v="nvim"
 alias trm=trash-put
 alias trl=trash-list
 alias tre=trash-empty
@@ -161,3 +175,8 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --ansi
  --color info:#afaf87,prompt:#d7005f,pointer:#af5fff
  --color marker:#87ff00,spinner:#af5fff,header:#87afaf'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export PATH="$HOME/.poetry/bin:$PATH"
+
+fortune 
+
