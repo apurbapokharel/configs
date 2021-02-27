@@ -14,19 +14,19 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'zxqfl/tabnine-vim'
 Plug 'arcticicestudio/nord-vim'
 Plug 'airblade/vim-gitgutter'
-Plug 'preservim/nerdtree'|
-          \ Plug 'Xuyuanp/nerdtree-git-plugin'
+" Plug 'preservim/nerdtree'|
+          " \ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
-Plug 'unkiwii/vim-nerdtree-sync'
 Plug 'zefei/vim-wintabs'
 Plug 'mhinz/vim-grepper'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'junegunn/goyo.vim'
 Plug 'justinmk/vim-sneak'
 Plug 'nelstrom/vim-visual-star-search'
-Plug 'lilydjwg/colorizer'
+Plug 'norcalli/nvim-colorizer.lua'
 Plug 'preservim/tagbar'
+Plug 'kyazdani42/nvim-web-devicons' " for file icons
+Plug 'kyazdani42/nvim-tree.lua'
 call plug#end()
 
 set background=dark
@@ -38,43 +38,81 @@ let mapleader=" "
 
 syntax on
 set mouse=n
-set relativenumber
+set termguicolors
 set number
-set lazyredraw                   " less redrawing during macro execution etc
+set relativenumber
+set lazyredraw                      " less redrawing during macro execution etc
 set autoread
-set path+=**                     " add cwd and 1 level of nesting to path
-set hidden                       " switching from unsaved buffer without '!'
-set ignorecase                   " ignore case in search
-set incsearch                    " incremental search highlighting
+set path+=**                        " add cwd and 1 level of nesting to path
+set hidden                          " switching from unsaved buffer without '!'
+set ignorecase                      " ignore case in search
+set incsearch                       " incremental search highlighting
 set cursorline
-set smartcase                    " case-sensitive only with capital letters
-set noruler                      " do not show ruler
-set list lcs=tab:‣\ ,trail:•     " customize invisibles
-set splitbelow                   " split below instead of above
-set splitright                   " split after instead of before
-set nobackup                     " do not keep backups
-set noswapfile                   " no more swapfiles
-set clipboard=unnamedplus       " copy into osx clipboard by default
-set encoding=utf-8               " utf-8 files
-set expandtab                    " softtabs, always (convert tabs to spaces)
-set tabstop=2                    " tabsize 2 spaces (by default)
-set shiftwidth=0                 " use 'tabstop' value for 'shiftwidth'
-set softtabstop=2                " tabsize 2 spaces (by default)
-set laststatus=2                 " always show statusline
-set backspace=2                  " restore backspace
-set nowrap                       " do not wrap text at `textwidth`
-set belloff=all                  " do not show error bells
-set synmaxcol=1000               " do not highlight long lines
-set timeoutlen=250               " keycode delay
-set title                        " Show the filename in the window titlebar
-set showcmd                      " Show the (partial) command as it’s being typed
+set smartcase                       " case-sensitive only with capital letters
+set noruler                         " do not show ruler
+set list lcs=tab:‣\ ,trail:•        " customize invisibles
+set splitbelow                      " split below instead of above
+set splitright                      " split after instead of before
+set nobackup                        " do not keep backups
+set noswapfile                      " no more swapfiles
+set clipboard=unnamedplus           "   copy into osx clipboard by default
+set encoding=utf-8                  " utf-8 files
+set expandtab                       " softtabs, always (convert tabs to spaces)
+set tabstop=2                       " tabsize 2 spaces (by default)
+set shiftwidth=0                    " use 'tabstop' value for 'shiftwidth'
+set softtabstop=2                   " tabsize 2 spaces (by default)
+set laststatus=2                    " always show statusline
+set backspace=2                     " restore backspace
+set belloff=all                     " do not show error bells
+set synmaxcol=1000                  " do not highlight long lines
+set timeoutlen=250                  " keycode delay
+set title                           " Show the filename in the window titlebar
+
+" Initialize colorizer
+lua require'colorizer'.setup()
+au WinEnter,BufEnter * :ColorizerAttachToBuffer
+au WinLeave,BufLeave * :ColorizerDetachFromBuffer
+
 set wildignore+=.git,.DS_Store,node_modules
 set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
+
+" Custom statusline
+function! GitBranch()
+  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+endfunction
+
+function! StatuslineGit()
+  let l:branchname = GitBranch()
+  return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
+endfunction
+
+function! MyStatusLine(mode)
+    if a:mode == 'Enter'
+      let statusline=""
+      let statusline.="%#PmenuSel#"
+      let statusline.="%{StatuslineGit()} %#LineNr#\ %.40F"
+      let statusline.="%="
+      let statusline.="%r%*"
+      let statusline .= "\ %p%%\ %l:%c\ %L\ "
+    endif
+    if a:mode == 'Leave'
+      let statusline="%#NonText#"
+    endif
+    return statusline
+endfunction
+
+au WinEnter,BufEnter * setlocal statusline=%!MyStatusLine('Enter')
+au WinLeave,BufLeave * setlocal statusline=%!MyStatusLine('Leave')
+set statusline=%!MyStatusLine('Enter')
+" Status line settings end
 
 vmap <leader>f <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
 inoremap jj <ESC>
+
+" Alternate way to quit
+nnoremap <C-Q> :wq!<CR>
 
 map <C-z> :u<CR>
 inoremap <C-z> <Esc><Esc> :u<BAR>:startinsert <CR>
@@ -168,11 +206,6 @@ xnoremap <silent> a* "sy:let @/=@s<CR>cgn
 " highlight trailing whitespace
 highlight TrailingWhitespace ctermfg=0 guifg=Black ctermbg=8 guibg=#41535B
 
-" hide ghost tilde characters after end of file
-highlight EndOfBuffer guibg=NONE ctermbg=NONE guifg=Black ctermfg=0
-
-" More clear vim selection method
-hi Visual term=reverse cterm=reverse guibg=Grey
 " Persistent undo
 " guard for distributions lacking the persistent_undo feature.
 if has('persistent_undo')
@@ -205,10 +238,6 @@ endif
 "Colorizer
 let g:colorizer_maxlines = 1000
 
-" Goyo
-let g:goyo_width=120
-nnoremap <leader>g :Goyo<CR>
-" autocmd! User GoyoLeave nested call <SID>set_transparent_bg()
 "Tagbar
 nmap <leader>b :TagbarToggle<CR>
 
@@ -219,33 +248,45 @@ highlight GitGutterAdd    guifg=#009900 ctermfg=2
 highlight GitGutterChange guifg=#bbbb00 ctermfg=3
 highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 highlight SignColumn guibg=NONE ctermbg=NONE
+autocmd WinEnter,BufEnter * :GitGutterBufferEnable
+autocmd WinLeave,BufLeave * :GitGutterBufferDisable
 
 " NerdTree
 " Move cursor to file when starting in nerdtree
-autocmd StdinReadPre * let s:std_in=1
-augroup nerdtree_open
-    autocmd!
-    autocmd vimenter * if !argc() | NERDTree | endif
-augroup END
+" let g:NERDTreeStatusline = '%#NonText#'
+" autocmd StdinReadPre * let s:std_in=1
+" augroup nerdtree_open
+"     autocmd!
+"     autocmd vimenter * if !argc() | NERDTree | endif
+" augroup END
+" nnoremap <leader>n :NERDTreeFocus<CR>
+" nnoremap <C-b> :NERDTreeToggle<CR>
+" nnoremap <C-f> :NERDTreeFind<CR>
+" " Close NerdTre automatically when you close vim
+" autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
+"   \ quit | endif
+" " Syncup nerd tree with the current open file
+" let g:nerdtree_sync_cursorline = 1
+
+" Nvim tree lua
+let g:nvim_tree_auto_open = 1 "0 by default, opens the tree when typing `vim $DIR` or `vim`
+let g:nvim_tree_auto_close = 1 "0 by default, closes the tree when it's the last window
+let g:nvim_tree_git_hl = 1 "0 by default, will enable file highlight for git attributes (can be used without the icons).
+let g:nvim_tree_indent_markers = 1 "0 by default, this option shows indent markers when folders are open
+let g:nvim_tree_follow = 1 "0 by default, this option allows the cursor to be updated when entering a buffer
 nnoremap <leader>n :NERDTreeFocus<CR>
-nnoremap <C-b> :NERDTreeToggle<CR>
-nnoremap <C-f> :NERDTreeFind<CR>
-" Close NerdTre automatically when you close vim
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
-  \ quit | endif
-hi NERDTreeFile guifg=#04a03d guibg=#041404 gui=NONE
-" Syncup nerd tree with the current open file
-let g:nerdtree_sync_cursorline = 1
+nnoremap <C-b> :NvimTreeToggle<CR>
+nnoremap <C-x> :NvimTreeFindFile<CR>
 
 " Fzf 
 " Search for file names
-map <C-f> <Esc><Esc>:Files!<CR>
+map <C-f> <Esc><Esc>:Files<CR>
 " Search for word in same file
-inoremap <C-f> <Esc><Esc>:BLines<CR>
+nnoremap <leader>f :BLines<CR>
 " Search for word in whole project direcotry
 nnoremap <C-p> :Rg!<Cr>
 " Search in files that are added in git
-noremap <C-G> :GFiles!<CR>
+noremap <C-G> :GFiles<CR>
 " Hide terminal status line for fzf
 if has('nvim') && !exists('g:fzf_layout')
   autocmd! FileType fzf
@@ -314,3 +355,18 @@ endif
 " Highlight column when line exceeds 81 length
 highlight ColorColumn ctermbg=magenta
 call matchadd('ColorColumn', '\%81v', 100)
+
+" Make active window obvious by dimming inactive buffer and windows
+hi def Dim guifg=#888888
+
+function! s:DimInactiveWindow()
+    syntax region Dim start='' end='$$$end$$$'
+endfunction
+
+function! s:UndimActiveWindow()
+    ownsyntax
+endfunction
+
+autocmd WinEnter * call s:UndimActiveWindow()
+autocmd BufEnter * call s:UndimActiveWindow()
+autocmd WinLeave * call s:DimInactiveWindow()
