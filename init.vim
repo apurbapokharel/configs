@@ -41,7 +41,6 @@ set mouse=n
 set termguicolors
 set number
 set relativenumber
-set lazyredraw                      " less redrawing during macro execution etc
 set autoread
 set path+=**                        " add cwd and 1 level of nesting to path
 set hidden                          " switching from unsaved buffer without '!'
