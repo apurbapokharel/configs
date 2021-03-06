@@ -177,6 +177,6 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --ansi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export PATH="$HOME/.poetry/bin:$PATH"
-
+export PATH="$HOME/.cargo/bin:$PATH"
 fortune 
 
