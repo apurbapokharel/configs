@@ -26,7 +26,10 @@ Plug 'nelstrom/vim-visual-star-search'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'preservim/tagbar'
 Plug 'kyazdani42/nvim-web-devicons' " for file icons
+Plug 'neovim/nvim-lspconfig'
+Plug 'anott03/nvim-lspinstall'
 Plug 'kyazdani42/nvim-tree.lua'
+Plug 'itchyny/vim-cursorword'
 call plug#end()
 
 set background=dark
@@ -67,6 +70,15 @@ set synmaxcol=1000                  " do not highlight long lines
 set timeoutlen=250                  " keycode delay
 set title                           " Show the filename in the window titlebar
 
+lua << EOF
+require'lspconfig'.pyright.setup{}
+require'lspconfig'.pyls.setup{}
+EOF
+
+" Autocompletion mednu settings
+set completeopt=longest,menuone,noselect
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
 " Initialize colorizer
 lua require'colorizer'.setup()
 au WinEnter,BufEnter * :ColorizerAttachToBuffer
@@ -105,6 +117,11 @@ au WinLeave,BufLeave * setlocal statusline=%!MyStatusLine('Leave')
 set statusline=%!MyStatusLine('Enter')
 " Status line settings end
 
+" Automatically remove whitespace on save
+autocmd BufWritePre *.py %s/\s\+$//e
+
+au WinLeave,BufLeave * :noh
+
 vmap <leader>f <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
@@ -139,8 +156,10 @@ noremap K     {
 noremap J     }
 noremap H     ^
 noremap L     $
+
 nmap ] <Plug>(GitGutterNextHunk)
 nmap [ <Plug>(GitGutterPrevHunk)
+
 " when pairing some braces or quotes, put cursor between them
 inoremap <>   <><Left>
 inoremap ()   ()<Left>
@@ -185,6 +204,12 @@ vnoremap Q :normal @q
 " Moving lines up and down like with alt in vscode
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
+
+" Replace the text from the top of register
+vmap r "_dP
+
+" Copy pasta with ctrv in insert mode
+inoremap <c-v> <esc>:set paste<cr>a<c-r>=getreg('+')<cr><esc>:set nopaste<cr>mi`[=`]`ia
 
 " Press * to search for the term under the cursor or a visual selection and
 " then press a key below to replace all instances of it in the current file.
