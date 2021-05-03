@@ -120,8 +120,6 @@ set statusline=%!MyStatusLine('Enter')
 " Automatically remove whitespace on save
 autocmd BufWritePre *.py %s/\s\+$//e
 
-au WinLeave,BufLeave * :noh
-
 vmap <leader>f <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
@@ -134,8 +132,8 @@ map <C-z> :u<CR>
 inoremap <C-z> <Esc><Esc> :u<BAR>:startinsert <CR>
 
 " Toggle underline when in insert mode
-autocmd BufLeave * setlocal nocursorline
-autocmd BufEnter * setlocal cursorline
+autocmd WinLeave,BufLeave * setlocal nocursorline
+autocmd WinEnter,BufEnter * setlocal cursorline
 autocmd InsertEnter,InsertLeave * set cul!
 map <leader>c :set cul!<CR>
 
@@ -311,6 +309,7 @@ nnoremap <leader>f :BLines<CR>
 nnoremap <C-p> :Rg!<Cr>
 " Search in files that are added in git
 noremap <C-G> :GFiles<CR>
+noremap <C-a> :Buffers<CR>
 " Hide terminal status line for fzf
 if has('nvim') && !exists('g:fzf_layout')
   autocmd! FileType fzf

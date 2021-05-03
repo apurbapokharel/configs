@@ -176,7 +176,8 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --ansi
  --color marker:#87ff00,spinner:#af5fff,header:#87afaf'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+
 export PATH="$HOME/.poetry/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
-fortune 
+fortune
 
