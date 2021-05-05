@@ -1,15 +1,15 @@
-" ######  
-" #     # 
-" #     # 
-" ######  
-" #     # 
+" ######
+" #     #
+" #     #
+" ######
+" #     #
 " #     # Barun Pradhan
 " ######  https://github.com/barunslick
 
 call plug#begin('~/.config/nvim/plugged/')
-Plug 'tpope/vim-commentary' 
+Plug 'tpope/vim-commentary'
 Plug 'machakann/vim-sandwich'
-Plug 'junegunn/vim-easy-align'
+"Plug 'junegunn/vim-easy-align'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'zxqfl/tabnine-vim'
 Plug 'arcticicestudio/nord-vim'
@@ -26,17 +26,17 @@ Plug 'nelstrom/vim-visual-star-search'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'preservim/tagbar'
 Plug 'kyazdani42/nvim-web-devicons' " for file icons
-Plug 'neovim/nvim-lspconfig'
-Plug 'anott03/nvim-lspinstall'
+" Plug 'neovim/nvim-lspconfig'
+" Plug 'anott03/nvim-lspinstall'
 Plug 'kyazdani42/nvim-tree.lua'
-Plug 'itchyny/vim-cursorword'
+" Plug 'itchyny/vim-cursorword'
 call plug#end()
 
 set background=dark
 colorscheme nord
 
 " Leader
-noremap <Space> <Nop> 
+noremap <Space> <Nop>
 let mapleader=" "
 
 syntax on
@@ -70,14 +70,12 @@ set synmaxcol=1000                  " do not highlight long lines
 set timeoutlen=250                  " keycode delay
 set title                           " Show the filename in the window titlebar
 
-lua << EOF
-require'lspconfig'.pyright.setup{}
-require'lspconfig'.pyls.setup{}
-EOF
-
 " Autocompletion mednu settings
 set completeopt=longest,menuone,noselect
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Press Space to turn off highlighting and clear any message already displayed.
+nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
 
 " Initialize colorizer
 lua require'colorizer'.setup()
@@ -170,7 +168,7 @@ inoremap ``   ``<Left>
 " Buffers
 set hidden
 nnoremap <A-h> :bp<CR>
-nnoremap <A-l> :bn<CR> 
+nnoremap <A-l> :bn<CR>
 nnoremap <A-c> :bp <BAR> bd #<CR>
 nnoremap <A-1> :b1<CR>
 nnoremap <A-2> :b2<CR>
@@ -273,6 +271,13 @@ highlight SignColumn guibg=NONE ctermbg=NONE
 autocmd WinEnter,BufEnter * :GitGutterBufferEnable
 autocmd WinLeave,BufLeave * :GitGutterBufferDisable
 
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+
 " NerdTree
 " Move cursor to file when starting in nerdtree
 " let g:NERDTreeStatusline = '%#NonText#'
@@ -300,16 +305,17 @@ nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-b> :NvimTreeToggle<CR>
 nnoremap <C-x> :NvimTreeFindFile<CR>
 
-" Fzf 
+" Fzf
 " Search for file names
 map <C-f> <Esc><Esc>:Files<CR>
 " Search for word in same file
 nnoremap <leader>f :BLines<CR>
 " Search for word in whole project direcotry
-nnoremap <C-p> :Rg!<Cr>
+nnoremap <C-F> :Rg!<Cr>
 " Search in files that are added in git
 noremap <C-G> :GFiles<CR>
-noremap <C-a> :Buffers<CR>
+noremap <C-space> :Buffers<CR>
+
 " Hide terminal status line for fzf
 if has('nvim') && !exists('g:fzf_layout')
   autocmd! FileType fzf
@@ -347,7 +353,7 @@ let g:sneak#label = 1
 map f <Plug>Sneak_s
 map F <Plug>Sneak_S
 
-" For vim-doge 
+" For vim-doge
 let g:doge_doc_standard_python = 'numpy'
 
 " After searching for text, press this mapping to do a project wide find and
