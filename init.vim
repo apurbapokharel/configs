@@ -9,13 +9,13 @@
 call plug#begin('~/.config/nvim/plugged/')
 Plug 'tpope/vim-commentary'
 Plug 'machakann/vim-sandwich'
-"Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/vim-easy-align'
+Plug 'psliwka/vim-smoothie'
+Plug 'tpope/vim-vinegar'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'zxqfl/tabnine-vim'
 Plug 'arcticicestudio/nord-vim'
 Plug 'airblade/vim-gitgutter'
-" Plug 'preservim/nerdtree'|
-          " \ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
 Plug 'zefei/vim-wintabs'
 Plug 'mhinz/vim-grepper'
@@ -24,11 +24,10 @@ Plug 'junegunn/fzf.vim'
 Plug 'justinmk/vim-sneak'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'norcalli/nvim-colorizer.lua'
-Plug 'preservim/tagbar'
 Plug 'kyazdani42/nvim-web-devicons' " for file icons
 " Plug 'neovim/nvim-lspconfig'
 " Plug 'anott03/nvim-lspinstall'
-Plug 'kyazdani42/nvim-tree.lua'
+" Plug 'kyazdani42/nvim-tree.lua'
 " Plug 'itchyny/vim-cursorword'
 call plug#end()
 
@@ -86,6 +85,8 @@ set wildignore+=.git,.DS_Store,node_modules
 set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 
 " Custom statusline
+
+" endfunction
 function! GitBranch()
   return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
 endfunction
@@ -95,25 +96,66 @@ function! StatuslineGit()
   return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
 endfunction
 
-function! MyStatusLine(mode)
-    if a:mode == 'Enter'
-      let statusline=""
-      let statusline.="%#PmenuSel#"
-      let statusline.="%{StatuslineGit()} %#LineNr#\ %.40F"
-      let statusline.="%="
-      let statusline.="%r%*"
-      let statusline .= "\ %p%%\ %l:%c\ %L\ "
-    endif
-    if a:mode == 'Leave'
-      let statusline="%#NonText#"
-    endif
-    return statusline
+" status bar colors
+au InsertEnter * hi statusline guifg=black guibg=#d7afff ctermfg=black ctermbg=magenta
+au InsertLeave * hi statusline guifg=black guibg=#8fbfdc ctermfg=black ctermbg=cyan
+hi statusline guifg=black guibg=#8fbfdc ctermfg=black ctermbg=cyan
+
+" Status line
+" default: set statusline=%f\ %h%w%m%r\ %=%(%l,%c%V\ %=\ %P%)
+
+" Status Line Custom
+let g:currentmode={
+    \ 'n'  : 'Normal',
+    \ 'no' : 'Normal·Operator Pending',
+    \ 'v'  : 'Visual',
+    \ "V"  : 'V·Line',
+    \ '^V' : 'V·Block',
+    \ 's'  : 'Select',
+    \ 'S'  : 'S·Line',
+    \ '^S' : 'S·Block',
+    \ 'i'  : 'Insert',
+    \ 'R'  : 'Replace',
+    \ 'Rv' : 'V·Replace',
+    \ 'c'  : 'Command',
+    \ 'cv' : 'Vim Ex',
+    \ 'ce' : 'Ex',
+    \ 'r'  : 'Prompt',
+    \ 'rm' : 'More',
+    \ 'r?' : 'Confirm',
+    \ '!'  : 'Shell',
+    \ 't'  : 'Terminal'
+    \}
+
+function! ModeCurrent() abort
+    let l:modecurrent = mode()
+    " use get() -> fails safely, since ^V doesn't seem to register
+    " 3rd arg is used when return of mode() == 0, which is case with ^V
+    " thus, ^V fails -> returns 0 -> replaced with 'V Block'
+    let l:modelist = toupper(get(g:currentmode, l:modecurrent, 'V·Block '))
+    let l:current_status_mode = l:modelist
+    return l:current_status_mode
 endfunction
 
-au WinEnter,BufEnter * setlocal statusline=%!MyStatusLine('Enter')
-au WinLeave,BufLeave * setlocal statusline=%!MyStatusLine('Leave')
-set statusline=%!MyStatusLine('Enter')
-" Status line settings end
+set laststatus=2
+set noshowmode
+set statusline=
+set statusline+=%0*\ %n\                                 " Buffer number
+set statusline+=%2*
+set statusline+=%{StatuslineGit()}
+set statusline+=%4*
+set statusline+=%m
+set statusline+=%1*\ %<%F%r%h%w\                       " File path, modified, readonly, helpfile, preview
+set statusline+=%3*│                                     " Separator
+set statusline+=%2*\ %Y\                                 " FileType
+set statusline+=%=                                       " Right Side
+set statusline+=%1*\ ln:\ %02l/%L\ (%3p%%)\              " Line number / total lines, percentage of document
+set statusline+=%0*\ %{ModeCurrent()}\ 
+
+"hi User1 ctermfg=007 ctermbg=239 guibg=#4e4e4e guifg=#adadad
+"hi User2 ctermfg=007 ctermbg=236 guibg=#303030 guifg=#adadad
+"hi User3 ctermfg=236 ctermbg=236 guibg=#303030 guifg=#303030
+"hi User4 ctermfg=239 ctermbg=239 guibg=#4e4e4e guifg=#4e4e4e
 
 " Automatically remove whitespace on save
 autocmd BufWritePre *.py %s/\s\+$//e
@@ -258,9 +300,6 @@ endif
 "Colorizer
 let g:colorizer_maxlines = 1000
 
-"Tagbar
-nmap <leader>b :TagbarToggle<CR>
-
 " Git GitGutter
 set updatetime=100
 autocmd VimEnter * GitGutterEnable
@@ -277,41 +316,13 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
-
-" NerdTree
-" Move cursor to file when starting in nerdtree
-" let g:NERDTreeStatusline = '%#NonText#'
-" autocmd StdinReadPre * let s:std_in=1
-" augroup nerdtree_open
-"     autocmd!
-"     autocmd vimenter * if !argc() | NERDTree | endif
-" augroup END
-" nnoremap <leader>n :NERDTreeFocus<CR>
-" nnoremap <C-b> :NERDTreeToggle<CR>
-" nnoremap <C-f> :NERDTreeFind<CR>
-" " Close NerdTre automatically when you close vim
-" autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
-"   \ quit | endif
-" " Syncup nerd tree with the current open file
-" let g:nerdtree_sync_cursorline = 1
-
-" Nvim tree lua
-let g:nvim_tree_auto_open = 1 "0 by default, opens the tree when typing `vim $DIR` or `vim`
-let g:nvim_tree_auto_close = 1 "0 by default, closes the tree when it's the last window
-let g:nvim_tree_git_hl = 1 "0 by default, will enable file highlight for git attributes (can be used without the icons).
-let g:nvim_tree_indent_markers = 1 "0 by default, this option shows indent markers when folders are open
-let g:nvim_tree_follow = 1 "0 by default, this option allows the cursor to be updated when entering a buffer
-nnoremap <leader>n :NERDTreeFocus<CR>
-nnoremap <C-b> :NvimTreeToggle<CR>
-nnoremap <C-x> :NvimTreeFindFile<CR>
-
 " Fzf
 " Search for file names
 map <C-f> <Esc><Esc>:Files<CR>
 " Search for word in same file
 nnoremap <leader>f :BLines<CR>
 " Search for word in whole project direcotry
-nnoremap <C-F> :Rg!<Cr>
+nnoremap <C-p> :Rg!<Cr>
 " Search in files that are added in git
 noremap <C-G> :GFiles<CR>
 noremap <C-space> :Buffers<CR>
@@ -395,6 +406,12 @@ endfunction
 function! s:UndimActiveWindow()
     ownsyntax
 endfunction
+
+"netrw
+let g:netrw_liststyle = 3
+let g:netrw_banner = 0
+let g:netrw_localrmdir='rm -r'
+nnoremap <silent>sf :<C-u>Ex<CR>
 
 autocmd WinEnter * call s:UndimActiveWindow()
 autocmd BufEnter * call s:UndimActiveWindow()
