@@ -10,6 +10,37 @@ export EDITOR=nvim
 if [ "$TMUX" = "" ]; then tmux; fi
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# Custom sudo prompt for spaceship
+SPACESHIP_SUDO_SHOW="${SPACESHIP_SUDO_SHOW=true}"
+SPACESHIP_SUDO_PREFIX="${SPACESHIP_SUDO_PREFIX="$SPACESHIP_PROMPT_DEFAULT_PREFIX"}"
+SPACESHIP_SUDO_SUFFIX="${SPACESHIP_SUDO_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"}"
+SPACESHIP_SUDO_COLOR="${SPACESHIP_SUDO_COLOR="cyan"}"
+
+spaceship_sudo (){
+  # If SPACESHIP_SUDO_SHOW is false, don't show foobar section
+  [[ $SPACESHIP_SUDO_SHOW == false ]] && return
+
+  # Check if foobar command is available for execution
+  spaceship::exists sudo || return
+
+  CAN_I_RUN_SUDO=$(sudo -n uptime 2>&1|grep "load"|wc -l)
+	if [ ${CAN_I_RUN_SUDO} -gt 0 ]; then
+    sudo_status="su"
+  else
+    sudo_status=""
+  fi
+
+  [[ -z $sudo_status ]] && return
+
+   spaceship::section \
+    "$SPACESHIP_SUDO_COLOR" \
+    "$SPACESHIP_SUDO_PREFIX" \
+    "[$sudo_status]" \
+    "$SPACESHIP_SUDO_SUFFIX"
+}
+
+# SPACESHIP SETTINS
 SPACESHIP_VI_MODE_SHOW=false
 SPACESHIP_DIR_TRUNC=2
 SPACESHIP_PROMPT_SEPARATE_LINE=false
@@ -24,8 +55,9 @@ SPACESHIP_CHAR_COLOR_SUCCESS=#f6830f
 SPACESHIP_DOCKER_SHOW=false
 SPACESHIP_DIR_COLOR=blue
 SPACESHIP_VENV_COLOR=green
-
+SPACESHIP_SUDOSHOW=true
 SPACESHIP_PROMPT_ADD_NEWLINE=true
+SPACESHIP_SUDO_SUFFIX=" "
 
 SPACESHIP_PROMPT_ORDER=(
   time          # Time stamps section
@@ -38,6 +70,7 @@ SPACESHIP_PROMPT_ORDER=(
   venv          # virtualenv section
   battery       # Battery level and status
   jobs          # Background jobs indicator
+  sudo
   char          # Prompt character
 )
 
@@ -75,7 +108,7 @@ function fzy() {
 }
 
 function open_vim_after_fzf() {
-    cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)" && vim
+    cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)" && nvim
 }
 
 function open_code_after_fzf() {
@@ -88,6 +121,13 @@ function fif() {
 	rg --ignore-case --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 8 '$1' || rg --ignore-case --pretty --context 8 '$1' {}" --preview-window=right:60%
 }
 
+# Edit and rerun
+function edit_and_run() {
+	BUFFER="fc"
+	zle accept-line
+}
+
+
 # find in files - open in Vim - go to 1st search result
 function vf() {
 	local file
@@ -96,8 +136,14 @@ function vf() {
 	then
 		nvim $file -c /$1 -c 'norm! n zz'
 	fi
-
 }
+
+# Home - Navigates to the current root workspace
+function git_root() {
+	BUFFER="cd $(git rev-parse --show-toplevel || echo ".")"
+	zle accept-line
+}
+
 function fzf-git-branch() {
     git rev-parse HEAD > /dev/null 2>&1 || return
 
@@ -154,8 +200,12 @@ bindkey -s "^F" 'cd_with_fzf^M'
 bindkey -s "^T" 'toggle-fzf-tab^M'
 bindkey -s "^g" 'ghcal -u barunslick^M'
 bindkey -s "^v" 'open_vim_after_fzf^M'
-bindkey -s "^e" 'open_code_after_fzf^M'
+bindkey -s "^o" 'open_code_after_fzf^M'
 bindkey -s "^k" 'cd ..^M'
+zle -N edit_and_run
+bindkey "^e" edit_and_run
+zle -N git_root
+bindkey "^h" git_root
 # User configuration
 
 alias vim="nvim"
@@ -166,6 +216,7 @@ alias trl=trash-list
 alias tre=trash-empty
 alias cm=command
 alias ls='exa -l --git'
+
 . /home/barunpradhan/.oh-my-zsh/plugins/z/z.sh
 . /home/barunpradhan/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
@@ -177,31 +228,31 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --ansi
  --color marker:#87ff00,spinner:#af5fff,header:#87afaf'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-bindkey -v
-export KEYTIMEOUT=1
+ # bindkey -v
+# export KEYTIMEOUT=1
 
-# Change cursor shape for different vi modes.
-function zle-keymap-select {
-  if [[ ${KEYMAP} == vicmd ]] ||
-     [[ $1 = 'block' ]]; then
-    echo -ne '\e[1 q'
-  elif [[ ${KEYMAP} == main ]] ||
-       [[ ${KEYMAP} == viins ]] ||
-       [[ ${KEYMAP} = '' ]] ||
-       [[ $1 = 'beam' ]]; then
-    echo -ne '\e[5 q'
-  fi
-}
-zle -N zle-keymap-select
-zle-line-init() {
-    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
-    echo -ne "\e[5 q"
-}
-zle -N zle-line-init
-echo -ne '\e[5 q' # Use beam shape cursor on startup.
-preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
-
+# # Change cursor shape for different vi modes.
+# function zle-keymap-select {
+#   if [[ ${KEYMAP} == vicmd ]] ||
+#      [[ $1 = 'block' ]]; then
+#     echo -ne '\e[1 q'
+#   elif [[ ${KEYMAP} == main ]] ||
+#        [[ ${KEYMAP} == viins ]] ||
+#        [[ ${KEYMAP} = '' ]] ||
+#        [[ $1 = 'beam' ]]; then
+#     echo -ne '\e[5 q'
+#   fi
+# }
+# zle -N zle-keymap-select
+# zle-line-init() {
+#     zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+#     echo -ne "\e[5 q"
+# }
+# zle -N zle-line-init
+# echo -ne '\e[5 q' # Use beam shape cursor on startup.
+# preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 export PATH="$HOME/.poetry/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/configs/runpathfunction:$PATH"
 fortune
 
