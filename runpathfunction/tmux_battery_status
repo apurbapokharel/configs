@@ -1,0 +1,7 @@
+#!/bin/bash
+status=$( battery_status )
+percentage=$( battery_percentage )
+[[ $status = "Discharging" && $percentage -le 20 ]] && echo "#[fg=red] $percentage% (VERY LOW) #[fg=black]" && exit 1
+[[ $status = "Discharging" && $percentage -ge 20 ]] && echo "#[fg=white] $percentage% #[fg=black]" && exit 1
+[[ $status = "Charging" ]] && echo "#[fg=green] $percentage% #[fg=black]" && exit 1
+[[ $status = "Unknown" ]] && echo "#[fg=yellow] $percentage% #[fg=black]" && exit 1
