@@ -58,7 +58,7 @@ set statusline+=%1*\ %<%t%r%h%w\                       " File path, modified, re
 set statusline+=%3*│                                     " Separator
 set statusline+=%2*\ %Y\                                 " FileType
 set statusline+=%=                                       " Right Side
-set statusline+=%1*\ ln:\ %02l/%L\ (%3p%%)\              " Line number / total lines, percentage of document
+set statusline+=%1*\ ln:\ %02l/%L\ %3*│%3p%%\              " Line number / total lines, percentage of document
 set statusline+=%0*\ %{ModeCurrent()}\ 
 
 "hi User1 ctermfg=007 ctermbg=239 guibg=#4e4e4e guifg=#adadad
