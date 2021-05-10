@@ -17,14 +17,13 @@ noremap H     ^
 noremap L     $
 
 " Moving lines up and down like with alt in vscode
-vnoremap J :m '>+0<CR>gv=gv
-vnoremap K :m '<-3<CR>gv=gv
+xnoremap J :move '>+1<CR>gv-gv
+xnoremap K :move '<-2<CR>gv-gv
 
 " Buffers
 set hidden
 nnoremap <A-h> :bp<CR>
 nnoremap <A-l> :bn<CR>
-nnoremap <A-c> :bp <BAR> bd #<CR>
 nnoremap <A-1> :b1<CR>
 nnoremap <A-2> :b2<CR>
 nnoremap <A-3> :b3<CR>

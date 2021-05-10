@@ -94,3 +94,9 @@ xmap <Leader>R
     \ :cfdo %s/<C-r>s//g \| update
      \<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
 
+let g:coc_global_extensions = [
+  \ 'coc-snippets',
+  \ 'coc-pyright', 
+  \ 'coc-json', 
+  \ ]
+

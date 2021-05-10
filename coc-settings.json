@@ -1,0 +1,12 @@
+{
+  "snippets.ultisnips.usePythonx": false,
+  "suggest.enablePreview": true,
+  "python.venvFolders": [
+    "envs",
+    ".pyenv",
+    ".direnv",
+    ".cache/pypoetry/virtualenvs"
+  ],
+  "python.formatting.provider": "autopep8",
+  "coc.preferences.formatOnSaveFiletypes": ["css", "Markdown", "javascript","python"]
+}

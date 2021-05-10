@@ -6,13 +6,13 @@ current=$( cat $dir"charge_now" )
 percentage=$((current*100/capacity))
 if [[ $status = "Discharging" && $percentage -le 20 ]];
 then
-  echo "#[fg=red] $percentage% (VERY LOW) #[fg=black]• #[fg=cyan]%I:%M #[default]"
+  echo "#[fg=red] $percentage% (VERY LOW) #[fg=black] "
 elif [[ $status = "Discharging" && $percentage -ge 20 ]];
 then
-  echo "#[fg=white] $percentage% #[fg=black]• #[fg=cyan]%I:%M #[default]"
+  echo "#[fg=white] $percentage% #[fg=black]"
 elif [[ $status = "Charging" ]];
 then
-  echo "#[fg=green] $percentage% #[fg=black]• #[fg=cyan]%I:%M #[default]"
+  echo "#[fg=green] $percentage% #[fg=black]"
 else
-  echo "#[fg=yellow] $percentage% #[fg=black]• #[fg=cyan]%I:%M #[default]"
+  echo "#[fg=yellow] $percentage% #[fg=black]"
 fi

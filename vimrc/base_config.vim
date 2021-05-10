@@ -38,6 +38,8 @@ set title                           " Show the filename in the window titlebar
 set completeopt=longest,menuone,noselect
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
+nnoremap <C-a> :source ~/configs/init.vim<CR> 
+
 " Press Space to turn off highlighting and clear any message already displayed.
 nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
 
@@ -48,6 +50,11 @@ inoremap jj <ESC>
 
 " Alternate way to quit
 nnoremap <C-Q> :wq!<CR>
+
+" Quit buffer
+nnoremap <A-c> :bp <BAR> bd #<CR>
+nnoremap <A-x> :bp <CR>
+
 
 map <C-z> :u<CR>
 inoremap <C-z> <Esc><Esc> :u<BAR>:startinsert <CR>

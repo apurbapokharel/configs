@@ -13,7 +13,6 @@ Plug 'junegunn/vim-easy-align'
 Plug 'psliwka/vim-smoothie'
 Plug 'tpope/vim-vinegar'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'zxqfl/tabnine-vim'
 Plug 'arcticicestudio/nord-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }

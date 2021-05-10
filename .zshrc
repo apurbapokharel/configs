@@ -6,8 +6,14 @@
 #     # Barun Pradhan
 ######  https://github.com/barunslick
 
+export PATH="$HOME/.poetry/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/configs/runpathfunction:$PATH"
 export EDITOR=nvim
-if [ "$TMUX" = "" ]; then tmux; fi
+
+if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+  exec tmux
+fi
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -251,8 +257,5 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --ansi
 # zle -N zle-line-init
 # echo -ne '\e[5 q' # Use beam shape cursor on startup.
 # preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
-export PATH="$HOME/.poetry/bin:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$HOME/configs/runpathfunction:$PATH"
 fortune
 
