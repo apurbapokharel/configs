@@ -15,8 +15,6 @@ highlight GitGutterAdd    guifg=#009900 ctermfg=2
 highlight GitGutterChange guifg=#bbbb00 ctermfg=3
 highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 highlight SignColumn guibg=NONE ctermbg=NONE
-autocmd WinEnter,BufEnter * :GitGutterBufferEnable
-autocmd WinLeave,BufLeave * :GitGutterBufferDisable
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
@@ -97,6 +95,12 @@ xmap <Leader>R
 let g:coc_global_extensions = [
   \ 'coc-snippets',
   \ 'coc-pyright', 
+  \ 'coc-sql',
   \ 'coc-json', 
   \ ]
 
+" Git messenger
+let g:git_messenger_no_default_mappings=v:true
+nmap <Leader>g <Plug>(git-messenger)
+
+let g:python3_host_prog='/usr/bin/python3'

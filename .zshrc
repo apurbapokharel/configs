@@ -10,6 +10,7 @@ export PATH="$HOME/.poetry/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/configs/runpathfunction:$PATH"
 export EDITOR=nvim
+export LC_ALL=en_US.UTF-8
 
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
   exec tmux
@@ -102,23 +103,23 @@ function open_with_fzf() {
 }
 
 function cd_with_fzf() {
-    cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)"
+    cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview")"
 }
 
 function pacs() {
-    sudo pacman -Syy $(pacman -Ssq | fzf -m --preview="pacman -Si {}" --preview-window=:hidden --bind=space:toggle-preview)
+    sudo pacman -Syy $(pacman -Ssq | fzf -m --preview="pacman -Si {}" --bind=space:toggle-preview)
 }
 
 function fzy() {
-    sudo yay -Syy $(yay -Ssq | fzf -m --preview="yay -Si {}" --preview-window=:hidden --bind=space:toggle-preview)
+    sudo yay -Syy $(yay -Ssq | fzf -m --preview="yay -Si {}" --bind=space:toggle-preview)
 }
 
 function open_vim_after_fzf() {
-    cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)" && nvim
+    cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" )" && nvim
 }
 
 function open_code_after_fzf() {
-    cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)" && code
+    cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" )" && code
 }
 
 # find-in-file(s)
@@ -226,7 +227,8 @@ alias ls='exa -l --git'
 . /home/barunpradhan/.oh-my-zsh/plugins/z/z.sh
 . /home/barunpradhan/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-export FZF_DEFAULT_COMMAND='rg --files --follow --no-ignore-vcs --hidden -g "!{node_modules/*,.git/*}"'
+# export FZF_DEFAULT_COMMAND='rg --files --follow --no-ignore-vcs --hidden -g "!{node_modules,.git,venv}"'
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --ansi
  --color fg:#d0d0d0,hl:#5f87af
  --color fg+:#d0d0d0,hl+:#5fd7ff

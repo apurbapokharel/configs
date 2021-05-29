@@ -26,7 +26,7 @@ set clipboard=unnamedplus           "   copy into osx clipboard by default
 set encoding=utf-8                  " utf-8 files
 set expandtab                       " softtabs, always (convert tabs to spaces)
 set tabstop=2                       " tabsize 2 spaces (by default)
-set shiftwidth=0                    " use 'tabstop' value for 'shift width'
+set shiftwidth=2                    " use 'tabstop' value for 'shift width'
 set softtabstop=2                   " tab size 2 spaces (by default)
 set laststatus=2                    " always show status line
 set backspace=2                     " restore backspace
@@ -36,21 +36,22 @@ set timeoutlen=250                  " key code delay
 set title                           " Show the filename in the window title bar
 set formatoptions-=ro               " Stop newline continuation of comments
 
-" Add new line up and below without leaving the cursor
-nmap <A-k> O<Esc>j
-nmap <A-j> o<Esc>k
+
+" " Add new line up and below without leaving the cursor
+" nmap <A-k> O<Esc>j
+" nmap <A-j> o<Esc>k
 
 source ~/configs/vimrc/modules/spell_checker.vim
 
 " Needed to create new line with O or O without the comment continuation
 augroup filetype_vim
     autocmd!
-    autocmd FileType vim setlocal formatoptions-=ro
+    autocmd FileType vim setlocal formatoptions-=cro
 augroup END
 
 " Auto completion menu settings
 set completeopt=longest,menuone,noselect
-inoremap <expr> <TAB> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" inoremap <expr> <TAB> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 nnoremap <C-a> :source ~/configs/init.vim<CR> 
 
@@ -177,14 +178,13 @@ call matchadd('ColorColumn', '\%81v', 100)
 " Make active window obvious by dimming inactive buffer and windows
 hi def Dim guifg=#888888
 
-function! s:DimInactiveWindow()
-    syntax region Dim start='' end='$$$end$$$'
-endfunction
+" function! s:DimInactiveWindow()
+"     syntax region Dim start='' end='$$$end$$$'
+" endfunction
 
-function! s:UndimActiveWindow()
-    ownsyntax
-endfunction
+" function! s:UndimActiveWindow()
+"     ownsyntax
+" endfunction
 
-autocmd WinEnter * call s:UndimActiveWindow()
-autocmd BufEnter * call s:UndimActiveWindow()
-autocmd WinLeave * call s:DimInactiveWindow()
+" autocmd BufEnter,WinEnter * call s:UndimActiveWindow()
+" autocmd BufLeave,WinLeave * call s:DimInactiveWindow()
