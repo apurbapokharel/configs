@@ -9,7 +9,6 @@
 call plug#begin('~/.config/nvim/plugged/')
 Plug 'tpope/vim-commentary'
 Plug 'machakann/vim-sandwich'
-Plug 'junegunn/vim-easy-align'
 Plug 'psliwka/vim-smoothie'
 Plug 'tpope/vim-vinegar'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -25,11 +24,13 @@ Plug 'norcalli/nvim-colorizer.lua'
 Plug 'kyazdani42/nvim-web-devicons' " for file icons
 Plug 'rhysd/git-messenger.vim'
 Plug 'TaDaa/vimade'
-Plug 'sansyrox/vim-python-virtualenv'
-" Plug 'neovim/nvim-lspconfig'
-" Plug 'anott03/nvim-lspinstall'
-" Plug 'kyazdani42/nvim-tree.lua'
-" Plug 'itchyny/vim-cursorword'
+Plug 'pechorin/any-jump.vim'
+Plug 'AndrewRadev/splitjoin.vim'
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+Plug 'junegunn/vim-easy-align'
+Plug 'tpope/vim-fugitive' "requirement from benwainwright/fzf-project
+Plug 'benwainwright/fzf-project'
+" Vim Script
 call plug#end()
 
 set background=dark

@@ -8,5 +8,5 @@
     ".cache/pypoetry/virtualenvs"
   ],
   "python.formatting.provider": "autopep8",
-  "coc.preferences.formatOnSaveFiletypes": ["css", "Markdown", "javascript","python"]
+  "coc.preferences.formatOnSaveFiletypes": ["css", "Markdown", "javascript", "python", "rust"]
 }

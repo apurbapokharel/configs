@@ -10,6 +10,7 @@ export PATH="$HOME/.poetry/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/configs/runpathfunction:$PATH"
 export EDITOR=nvim
+export BROWSER=brave
 export LC_ALL=en_US.UTF-8
 
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
@@ -184,6 +185,39 @@ function fzf-git-checkout() {
 
 alias gb='fzf-git-branch'
 alias gco='fzf-git-checkout'
+#
+# --- gh cli goodness ---
+# select and go to gh issue on web
+ghi() {
+  local item
+  item=$(gh issue list | fzf | awk '{print $1}')
+  gh issue view $item --web
+}
+
+# select from all PRs and view in vim
+ghpr() {
+  local prid
+  prid=$(gh pr list -L100 | fzf | cut -f1)
+  if [[ -n $prid ]]
+  then
+    gh pr view $prid --web
+  fi
+}
+
+# select from PRs needing my review and view in vim
+ghprr() {
+  local prid
+  prid=$(gh pr list -L100 --search "is:open is:pr review-requested:@me" | fzf | cut -f1)
+  if [[ -n $prid ]]
+  then
+    gh pr view $prid --web
+  fi
+}
+
+# view GH issue in browser
+ghib() {
+  gh issue view --web $1
+}
 
 # Add sudo to current line if not empty else to previous command
 sudo-command-line() {
@@ -218,11 +252,15 @@ bindkey "^h" git_root
 alias vim="nvim"
 alias vi="nvim"
 alias v="nvim"
+alias nv="neovide &"
 alias trm=trash-put
 alias trl=trash-list
 alias tre=trash-empty
 alias cm=command
 alias ls='exa -l --git'
+alias lst='exa -l --tree --git-ignore'
+alias jt='jira-terminal'
+alias jtc="jira-terminal list -p 'CCMR Insights (MSDF)' -a 'Barun Pradhan'"
 
 . /home/barunpradhan/.oh-my-zsh/plugins/z/z.sh
 . /home/barunpradhan/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

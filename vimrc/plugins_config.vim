@@ -17,20 +17,21 @@ highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 highlight SignColumn guibg=NONE ctermbg=NONE
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
+xmap ea <Plug>(EasyAlign)
 
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
+nmap ea <Plug>(EasyAlign)
 
 " Fzf
 " Search for file names
-map <C-f> <Esc><Esc>:Files<CR>
+map <C-f> <esc><esc> :GFiles --cached --others --exclude-standard<CR>
+" map <c-f> <esc><esc>:Files<CR>
 " Search for word in same file
 nnoremap <leader>f :BLines<CR>
 " Search for word in whole project direcotry
 nnoremap <C-p> :Rg!<Cr>
 " Search in files that are added in git
-noremap <C-G> :GFiles<CR>
+noremap <C-g> :Files<CR>
 noremap <C-space> :Buffers<CR>
 
 " Hide terminal status line for fzf
@@ -97,7 +98,7 @@ let g:coc_global_extensions = [
   \ 'coc-pyright', 
   \ 'coc-sql',
   \ 'coc-json', 
-  \ 'coc-omnisharp',
+  \ 'coc-rust-analyzer',
   \ ]
 
 " Git messenger
@@ -105,3 +106,24 @@ let g:git_messenger_no_default_mappings=v:true
 nmap <Leader>g <Plug>(git-messenger)
 
 let g:python3_host_prog='/usr/bin/python3'
+
+"Vim-multi
+let g:VM_maps = {}
+let g:VM_maps['Find Under']         = '<C-d>'           " replace C-n
+let g:VM_maps['Find Subword Under'] = '<C-d>'           " replace visual C-n
+
+""Telescope
+"nnoremap <C-f> <cmd>Telescope find_files<cr>
+"nnoremap <C-p> <cmd>Telescope live_grep<cr>
+"nnoremap <C-space> <cmd>Telescope buffers<cr>
+
+" Neovide
+let g:neovide_cursor_animation_length=0.1
+let g:neovide_cursor_trail_length=0.6
+let g:neovide_cursor_antialiasing=v:false
+
+" Fzf project
+nmap <C-a> :FzfSwitchProject <CR>
+let g:fzfSwitchProjectWorkspaces = [ '~/Documents/lf-projects/CCMR', '~/Documents/my_projects']
+let g:fzfSwitchProjectProjects = ['~/configs']
+

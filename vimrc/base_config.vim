@@ -1,7 +1,6 @@
 " Leader
 noremap <Space> <Nop>
 let mapleader=" "
-
 syntax on
 set mouse=n
 set termguicolors
@@ -35,8 +34,8 @@ set synmaxcol=1000                  " do not highlight long lines
 set timeoutlen=250                  " key code delay
 set title                           " Show the filename in the window title bar
 set formatoptions-=ro               " Stop newline continuation of comments
-
-
+set guifont=Monospace:h32
+set guicursor=i:blinkwait700-blinkon400-blinkoff250
 " " Add new line up and below without leaving the cursor
 " nmap <A-k> O<Esc>j
 " nmap <A-j> o<Esc>k
@@ -53,7 +52,15 @@ augroup END
 set completeopt=longest,menuone,noselect
 " inoremap <expr> <TAB> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-nnoremap <C-a> :source ~/configs/init.vim<CR> 
+nnoremap ; :
+vnoremap ; :
+
+ " Paste the last thing yanked instead of deleted
+nmap ,p "0p
+nmap ,P "0P
+
+
+" nnoremap <C-a> :source ~/configs/init.vim<CR> 
 
 " Press Space to turn off highlighting and clear any message already displayed.
 nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
@@ -188,3 +195,4 @@ hi def Dim guifg=#888888
 
 " autocmd BufEnter,WinEnter * call s:UndimActiveWindow()
 " autocmd BufLeave,WinLeave * call s:DimInactiveWindow()
+
