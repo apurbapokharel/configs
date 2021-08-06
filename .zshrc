@@ -6,16 +6,19 @@
 #     # Barun Pradhan
 ######  https://github.com/barunslick
 
+export PATH="$HOME/scripts:$PATH"
 export PATH="$HOME/.poetry/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/configs/runpathfunction:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+eval "$(pyenv init -)"
 export EDITOR=nvim
 export BROWSER=brave
 export LC_ALL=en_US.UTF-8
 
-if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-  exec tmux
-fi
+# if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+#   exec tmux
+# fi
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -49,7 +52,8 @@ spaceship_sudo (){
 }
 
 # SPACESHIP SETTINS
-SPACESHIP_VI_MODE_SHOW=false
+SPACESHIP_VI_MODE_SHOW=true
+SPACESHIP_VI_MODE_COLOR=blue
 SPACESHIP_DIR_TRUNC=2
 SPACESHIP_PROMPT_SEPARATE_LINE=false
 # SPACESHIP_GIT_SYMBOL=
@@ -78,6 +82,7 @@ SPACESHIP_PROMPT_ORDER=(
   venv          # virtualenv section
   battery       # Battery level and status
   jobs          # Background jobs indicator
+  vi_mode
   sudo
   char          # Prompt character
 )
@@ -87,14 +92,17 @@ SPACESHIP_RPROMPT_ORDER=(
  exec_time
 )
 
-export ZSH="/home/barunpradhan/.oh-my-zsh"
+export ZSH="/home/barun/.oh-my-zsh"
 ZSH_THEME="spaceship"
 
 plugins=(git
+  vi-mode
   forgit
 	zsh-autosuggestions
   fz
   fzf-tab
+  zsh-syntax-highlighting
+  z
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -247,23 +255,24 @@ zle -N edit_and_run
 bindkey "^e" edit_and_run
 zle -N git_root
 bindkey "^h" git_root
-# User configuration
+
+# User configuration/aliases
 
 alias vim="nvim"
 alias vi="nvim"
 alias v="nvim"
 alias nv="neovide &"
+alias dnv="devour neovide &"
+alias dfeh="devour feh --scale-down --auto-zoom"
 alias trm=trash-put
 alias trl=trash-list
 alias tre=trash-empty
 alias cm=command
 alias ls='exa -l --git'
 alias lst='exa -l --tree --git-ignore'
-alias jt='jira-terminal'
-alias jtc="jira-terminal list -p 'CCMR Insights (MSDF)' -a 'Barun Pradhan'"
-
-. /home/barunpradhan/.oh-my-zsh/plugins/z/z.sh
-. /home/barunpradhan/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+alias sv="source venv/bin/activate"
+alias dv="deactivate"
+alias dmpv="devour mpv"
 
 # export FZF_DEFAULT_COMMAND='rg --files --follow --no-ignore-vcs --hidden -g "!{node_modules,.git,venv}"'
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
@@ -274,9 +283,9 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --ansi
  --color marker:#87ff00,spinner:#af5fff,header:#87afaf'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
- # bindkey -v
+bindkey -v
+eval spaceship_vi_mode_enable
 # export KEYTIMEOUT=1
-
 # # Change cursor shape for different vi modes.
 # function zle-keymap-select {
 #   if [[ ${KEYMAP} == vicmd ]] ||
@@ -297,5 +306,5 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --ansi
 # zle -N zle-line-init
 # echo -ne '\e[5 q' # Use beam shape cursor on startup.
 # preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
-fortune
+neofetch
 

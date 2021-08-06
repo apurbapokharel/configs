@@ -3,7 +3,6 @@ noremap <Space> <Nop>
 let mapleader=" "
 syntax on
 set mouse=n
-set termguicolors
 set number
 set relativenumber
 set autoread
@@ -89,6 +88,10 @@ autocmd WinLeave,BufLeave * setlocal nocursorline
 autocmd WinEnter,BufEnter * setlocal cursorline
 autocmd InsertEnter,InsertLeave * set cul!
 map <leader>c :set cul!<CR>
+
+" Yank after the current cursor position to the end of line
+nnoremap Y y$
+
 
 " when pairing some braces or quotes, put cursor between them
 inoremap <>   <><Left>
