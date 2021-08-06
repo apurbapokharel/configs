@@ -1,0 +1,5 @@
+*.o
+*.rej.*
+
+dwm/dwm
+st/st
