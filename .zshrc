@@ -12,11 +12,13 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/configs/runpathfunction:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 eval "$(pyenv init -)"
+
 export EDITOR=nvim
 export BROWSER=brave
 export LC_ALL=en_US.UTF-8
 export GDK_SCALE=2
 export GDK_DPI_SCALE=0.5
+export TERMINAL="st"
 
 
 
