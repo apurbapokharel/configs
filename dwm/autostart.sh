@@ -24,11 +24,11 @@ run "xfce4-power-manager"
 #run "blueberry-tray"
 run "/usr/lib/xfce4/notifyd/xfce4-notifyd"
 run "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
-picom -b --config ~/.config/dwm/picom.conf &
-run "numlockx on"
+# picom -b --config ~/.config/dwm/picom.conf &
+# run "numlockx on"
 run "volumeicon"
 run slstatus &
-sxhkd -c ~/.config/dwm/sxhkd/sxhkdrc &
+# sxhkd -c ~/.config/dwm/sxhkd/sxhkdrc &
 #run "nitrogen --restore"
 # run "conky -c $HOME/.config/arco-dwm/system-overview"
 #you can set wallpapers in themes as well
