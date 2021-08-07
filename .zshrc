@@ -15,6 +15,10 @@ eval "$(pyenv init -)"
 export EDITOR=nvim
 export BROWSER=brave
 export LC_ALL=en_US.UTF-8
+export GDK_SCALE=2
+export GDK_DPI_SCALE=0.5
+
+
 
 # if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
 #   exec tmux
@@ -306,5 +310,4 @@ eval spaceship_vi_mode_enable
 # zle -N zle-line-init
 # echo -ne '\e[5 q' # Use beam shape cursor on startup.
 # preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
-neofetch
 
