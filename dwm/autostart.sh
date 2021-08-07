@@ -17,7 +17,7 @@ function run {
 #run xrandr --output HDMI2 --right-of HDMI1 --auto
 #autorandr horizontal
 
-run "nm-applet"
+ # run "nm-applet"
 #run "pamac-tray"
 # run "variety"
 run "xfce4-power-manager"
@@ -26,7 +26,7 @@ run "/usr/lib/xfce4/notifyd/xfce4-notifyd"
 run "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 # picom -b --config ~/.config/dwm/picom.conf &
 # run "numlockx on"
-run "volumeicon"
+# run "volumeicon"
 run slstatus &
 sxhkd -c ~/.config/sxhkd/sxhkdrc &
 #run "nitrogen --restore"

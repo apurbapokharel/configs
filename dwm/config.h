@@ -32,12 +32,11 @@ static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, nord_deep_dark, col_gray2 },
-	[SchemeSel]  = { col_gray4, nord_blue,  nord_orange },
+	[SchemeSel]  = { col_gray4, col_cyan,  nord_orange },
 };
 static const unsigned int alphas[][3]      = {
 	/*               fg      bg        border     */
 	[SchemeNorm] = { OPAQUE, baralpha, borderalpha },
-
 	[SchemeSel]  = { OPAQUE, baralpha, borderalpha },
 };
 

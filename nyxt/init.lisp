@@ -12,6 +12,8 @@
   ((keymap-scheme
     (let ((scheme %slot-default%))
       (define-key (gethash scheme:vi-normal scheme)
+      ;query in search engine
+        "M-s" 'query-selection-in-search-engine
       ;history
         "h t" 'nyxt/web-mode:history-tree
       ;boookmarks
