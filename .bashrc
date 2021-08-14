@@ -4,6 +4,20 @@
 
 [[ $- != *i* ]] && return
 
+export PATH="$HOME/scripts:$PATH"
+export PATH="$HOME/.poetry/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/configs/runpathfunction:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+eval "$(pyenv init -)"
+
+export EDITOR=nvim
+export BROWSER=brave
+export LC_ALL=en_US.UTF-8
+export GDK_SCALE=2
+export GDK_DPI_SCALE=0.5
+export TERMINAL="st"
+
 colors() {
 	local fgc bgc vals seq0
 
@@ -103,6 +117,24 @@ alias free='free -m'                      # show sizes in MB
 alias np='nano -w PKGBUILD'
 alias more=less
 
+
+alias vim="nvim"
+alias vi="nvim"
+alias v="nvim"
+alias nv="neovide &"
+alias dnv="devour neovide &"
+alias dfeh="devour feh --scale-down --auto-zoom"
+alias trm=trash-put
+alias trl=trash-list
+alias tre=trash-empty
+alias cm=command
+alias ls='exa -l --git'
+alias lsa='exa -l -a --git'
+alias lst='exa -l --tree --git-ignore'
+alias sv="source venv/bin/activate"
+alias dv="deactivate"
+alias dmpv="devour mpv"
+
 xhost +local:root > /dev/null 2>&1
 
 complete -cf sudo
@@ -123,12 +155,127 @@ shopt -s histappend
 open_with_fzf() {
     fd -t f -H -I | fzf -m --preview="xdg-mime query default {}" | xargs -ro -d "\n" xdg-open 2>&-
 }
+
 cd_with_fzf() {
-    cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)"
+    cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview")"
 }
+
 pacs() {
-    sudo pacman -Syy $(pacman -Ssq | fzf -m --preview="pacman -Si {}" --preview-window=:hidden --bind=space:toggle-preview)
+    sudo pacman -Syy $(pacman -Ssq | fzf -m --preview="pacman -Si {}" --bind=space:toggle-preview)
 }
+
+fzy() {
+    sudo yay -Syy $(yay -Ssq | fzf -m --preview="yay -Si {}" --bind=space:toggle-preview)
+}
+
+open_vim_after_fzf() {
+    cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" )" && nvim
+}
+
+open_code_after_fzf() {
+    cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" )" && code
+}
+
+# find-in-file(s)
+fif() {
+	if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
+	rg --ignore-case --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 8 '$1' || rg --ignore-case --pretty --context 8 '$1' {}" --preview-window=right:60%
+}
+
+
+# find in files - open in Vim - go to 1st search result
+vf() {
+	local file
+	file=$(fif $1)
+	if [[ -n $file ]]
+	then
+		nvim $file -c /$1 -c 'norm! n zz'
+	fi
+}
+
+# Home - Navigates to the current root workspace
+
+fzf-git-branch() {
+    git rev-parse HEAD > /dev/null 2>&1 || return
+
+    git branch --color=always --all --sort=-committerdate |
+        grep -v HEAD |
+        fzf --height 50% --ansi --no-multi --preview-window right:65% \
+            --preview 'git log -n 50 --color=always --date=short --pretty="format:%C(auto)%cd %h%d %s" $(sed "s/.* //" <<< {})' |
+        sed "s/.* //"
+}
+
+fzf-git-checkout() {
+    git rev-parse HEAD > /dev/null 2>&1 || return
+
+    local branch
+
+    branch=$(fzf-git-branch)
+    if [[ "$branch" = "" ]]; then
+        echo "No branch selected."
+        return
+    fi
+
+    # If branch name starts with 'remotes/' then it is a remote branch. By
+    # using --track and a remote branch name, it is the same as:
+    # git checkout -b branchName --track origin/branchName
+    if [[ "$branch" = 'remotes/'* ]]; then
+        git checkout --track $branch
+    else
+        git checkout $branch;
+    fi
+}
+
+ # Outputs the name of the current branch
+# Usage example: git pull origin $(git_current_branch)
+# Using '--quiet' with 'symbolic-ref' will not cause a fatal error (128) if
+# it's not a symbolic ref, but in a Git repo
+git_current_branch() {
+  if git rev-parse --git-dir > /dev/null 2>&1; then
+    BRANCH=$(git branch | sed -nr 's/\*\s(.*)/\1/p')
+
+    [[ ! -z "$BRANCH" ]] && echo "$BRANCH"
+  fi
+}
+
+# --- gh cli goodness ---
+# select and go to gh issue on web
+ghi() {
+  local item
+  item=$(gh issue list | fzf | awk '{print $1}')
+  gh issue view $item --web
+}
+
+# select from all PRs and view in vim
+ghpr() {
+  local prid
+  prid=$(gh pr list -L100 | fzf | cut -f1)
+  if [[ -n $prid ]]
+  then
+    gh pr view $prid --web
+  fi
+}
+
+# select from PRs needing my review and view in vim
+ghprr() {
+  local prid
+  prid=$(gh pr list -L100 --search "is:open is:pr review-requested:@me" | fzf | cut -f1)
+  if [[ -n $prid ]]
+  then
+    gh pr view $prid --web
+  fi
+}
+
+# view GH issue in browser
+ghib() {
+  gh issue view --web $1
+}
+
+# bind '"\C-s":"sudo-command-line\n"'
+bind '"\C-g":"ghcal -u barunslick\n"'
+bind '"\C-v":"open_vim_after_fzf\n"'
+bind '"\C-o":"open_code_after_fzf\n"'
+bind '"\C-k":"cd ..\n"'
 bind '"\C-f":"cd_with_fzf\n"'
 # # ex - archive extractor
 # # usage: ex <file>
@@ -155,9 +302,28 @@ ex ()
 }
 export PATH="$PATH:/home/barunpradhan/scripts"
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+# Aliases
+alias gb='fzf-git-branch'
+alias gc='git commit'
+alias gc!='git commit --amend'
+alias gco='fzf-git-checkout'
+alias ga='git add'
+alias gd='git diff' 
+alias gdc='git diff --cached' 
+alias gl='git log'
+alias gp='git pull' 
+alias gst='git status' 
+alias gcb='git checkout -b'
+alias glog='git log --oneline --decorate --graph'
+alias ggpull='git pull origin "$(git_current_branch)"'
+alias ggpush='git push origin "$(git_current_branch)"'
+alias gf='git fetch'
+alias gfa='git fetch --all'
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[ -f ~/.oh-my-zsh/plugins/z/z.sh ] && source ~/.oh-my-zsh/plugins/z/z.sh
+[ -f ~/.oh-my-zsh/custom/plugins/forgit/forgit.plugin.sh ] && source ~/.oh-my-zsh/custom/plugins/forgit/forgit.plugin.sh
+[ -f /usr/share/git/git-prompt.sh ] && source /usr/share/git/git-prompt.sh
 . "$HOME/.cargo/env"
+
+PS1='[\e[0;34m\u@\h \W$(__git_ps1 " (%s)")\e[0;37m]\$ '
