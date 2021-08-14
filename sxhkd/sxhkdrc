@@ -9,7 +9,7 @@
 
 #Thunar
 super + F8
-    dolphin
+    pcmanfm
 
 #Evolution
 super + F9
@@ -18,6 +18,9 @@ super + F9
 #Spotify
 super + F10
     spotify
+
+super + F6
+    amixer set Capture nocap
 
 ##Rofi Fullscreen
 #super + F11
@@ -73,25 +76,19 @@ super + p
 #################################################################
 
 #File-Manager
-super + shift + Return
-	dolphin
+super + shift + f
+    pcmanfm
 
-#Keyboard dependent
-#File-Manager
-super + shift + KP_Enter
-	dolphin
-
-#dmenu
-super + shift + d
-	dmenu_run -i -nb '#191919' -nf '#fea63c' -sb '#fea63c' -sf '#191919' -fn 'NotoMonoRegular:bold:pixelsize=14'
+super + shift + m
+    mic
 
 #reload sxhkd:
 super + shift + s
-	pkill -USR1 -x sxhkd
+    pkill -USR1 -x sxhkd
 
 #kill dwm and goto start session
 super + shift + q
-  killall dwm
+    killall dwm
 
 #################################################################
 # CONTROL + ALT KEYS
@@ -107,7 +104,7 @@ ctrl + alt + Prior
 
 #File-Manager
 ctrl + alt + b
-     dolphin
+     pcmanfm
 
 #arcolinux-logout
 ctrl + alt + k

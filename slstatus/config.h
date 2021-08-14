@@ -68,7 +68,8 @@ static const struct arg args[] = {
 		{ battery_perc,  " %s%% | ", "BAT0" },
     { run_command, "|  %s%% | ", "/bin/sh -c \"amixer get Master | tail -n1 | grep -Po '\\[\\K[^%]*' | head -n1\"" },
     { wifi_essid,  "|  %s ", "wlp2s0" },
-    { wifi_perc,  "%s%% | ", "wlp2s0" },
+    { wifi_perc,  "%s%%", "wlp2s0" },
+    { run_command,  " ( %s) | ", "/bin/sh -c \"checkvpn status\"" },
 		/* { battery_remaining,  " (%s) | ", "BAT0" }, */
 		/*{ disk_free,"[hdd %sB]  | ",      "/" },*/
 		{ datetime, "|  %s","%a %b %d %R |" }

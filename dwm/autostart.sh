@@ -22,7 +22,8 @@ function run {
 # run "variety"
 run "xfce4-power-manager"
 #run "blueberry-tray"
-run "/usr/lib/xfce4/notifyd/xfce4-notifyd"
+# run "/usr/lib/xfce4/notifyd/xfce4-notifyd"
+run "/usr/bin/dunst"
 run "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 # picom -b --config ~/.config/dwm/picom.conf &
 # run "numlockx on"

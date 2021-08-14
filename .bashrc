@@ -317,6 +317,7 @@ alias gcb='git checkout -b'
 alias glog='git log --oneline --decorate --graph'
 alias ggpull='git pull origin "$(git_current_branch)"'
 alias ggpush='git push origin "$(git_current_branch)"'
+alias ggp='git push origin "$(git_current_branch)"'
 alias gf='git fetch'
 alias gfa='git fetch --all'
 
